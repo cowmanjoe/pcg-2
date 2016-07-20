@@ -11,6 +11,7 @@ public class FloorTile extends Tile {
 	
 	public FloorTile() {
 		items = new ArrayList<Item>(); 
+		solid = false; 
 		
 		texture = new Texture("floorTile.png");
 	}
@@ -22,6 +23,13 @@ public class FloorTile extends Tile {
 			i.setX(x + texture.getWidth() / 2 - i.getWidth() / 2);
 			i.setY(y + texture.getHeight() / 2 - i.getHeight() / 2);
 			i.draw(batch);
+		}
+	}
+	
+	public void addItem(Item.Type type) {
+		items.add(new Item(type));
+		if (items.size() > 1) {
+			System.out.println(items.size() + " items on the tile.");
 		}
 	}
 }

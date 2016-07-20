@@ -10,7 +10,8 @@ public class Room {
 	
 	private Tile[][] tiles; 
 	
-	
+	private int x; 
+	private int y; 
 	
 	public Room(Tile[][] tiles) {
 		this.tiles = tiles; 
@@ -21,7 +22,7 @@ public class Room {
 	public void draw(SpriteBatch batch) {
 		for (int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[i].length; j++) {				
-				tiles[i][j].draw(batch, i * tiles[0][0].getWidth(), j * tiles[0][0].getHeight());
+				tiles[i][j].draw(batch, x + i * tiles[0][0].getWidth(), y + j * tiles[0][0].getHeight());
 			}
 		}
 	}
@@ -51,5 +52,21 @@ public class Room {
 	
 	public int getHeight() {
 		return getNumYTiles() * getTileHeight(); 
+	}
+	
+	public void setX(int x) {
+		this.x = x; 
+	}
+	
+	public int getX() {
+		return x; 
+	}
+	
+	public void setY(int y) {
+		this.y = y; 
+	}
+	
+	public int getY() {
+		return y; 
 	}
 }

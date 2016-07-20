@@ -7,7 +7,7 @@ public abstract class Tile {
 	
 	protected Texture texture; 
 	
-	
+	protected boolean solid; 
 	
 	
 	public void draw(SpriteBatch batch, int x, int y) {
