@@ -28,8 +28,6 @@ public class FloorTile extends Tile {
 	
 	public void addItem(Item.Type type) {
 		items.add(new Item(type));
-		if (items.size() > 1) {
-			System.out.println(items.size() + " items on the tile.");
-		}
+		
 	}
 }

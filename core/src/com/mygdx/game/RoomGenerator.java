@@ -25,10 +25,18 @@ public class RoomGenerator {
 			for(int j = 0; j < tiles[i].length; j++) {
 				// Generate tile randomly based on location
 
-				// Placeholder (make all tiles floor tiles)
+				// If to check borders to make walls borders
+				// and 1/20 border tiles exits (except corners)
 				if (i == 0 || j == 0 || i == tiles.length - 1 || j == tiles[i].length - 1) {		
-					if (r.nextInt(20) == 0) 
-						tiles[i][j] = new FloorTile();
+					if (r.nextInt(20) == 0 && 
+							!(i == 0 && j == 0) && 
+							!(i == tiles.length - 1 && j == 0) &&
+							!(i == 0 && j == tiles[i].length - 1) && 
+							!(i == tiles.length - 1 && j == tiles[i].length - 1))  {
+						tiles[i][j] = new ExitTile();
+						System.out.println("Exit placed at i = " + i + " and j = " + j);
+					}
+						
 					else 
 						tiles[i][j] = new WallTile(); 
 				}
@@ -51,4 +59,6 @@ public class RoomGenerator {
 		
 		return tiles; 
 	}
+	
+
 }

@@ -11,9 +11,13 @@ public class PCGGame extends ApplicationAdapter {
 	
 	private Room room; 
 	
+	private float time; 
+	
 	@Override
 	public void create () {
-		super.resize(1920, 1080);
+		time = 0f;
+		
+		
 		
 		batch = new SpriteBatch();
 		room = RoomGenerator.newRoom(Room.DEFAULT_WIDTH, Room.DEFAULT_HEIGHT);
@@ -25,6 +29,17 @@ public class PCGGame extends ApplicationAdapter {
 	public void render () {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		time += Gdx.graphics.getDeltaTime(); 
+		
+		if (time > 2) {
+			time = 0; 
+			room = RoomGenerator.newRoom(Room.DEFAULT_WIDTH, Room.DEFAULT_HEIGHT); 
+			room.setX(Gdx.graphics.getWidth() / 2 - room.getWidth() / 2);
+			room.setY(Gdx.graphics.getHeight() / 2 - room.getHeight() / 2);
+		
+		}
+		
 		batch.begin();
 		room.draw(batch);
 		batch.end();
