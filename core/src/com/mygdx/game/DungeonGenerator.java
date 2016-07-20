@@ -32,12 +32,15 @@ public class DungeonGenerator {
 		List<Quadrant> result = new ArrayList<Quadrant>(); 
 		Random r = new Random(); 
 		
-		if (q.w > minSize && q.h > minSize) {
+		if (q.w > minSize * 2 && q.h > minSize * 2) {
 			List<Quadrant> splitResult;
-			if (r.nextBoolean())
-				splitResult = q.splitHorizontally(r.nextInt(q.h));
-			else 
-				splitResult = q.splitVertically(r.nextInt(q.w));
+			if (r.nextBoolean()) {
+				splitResult = q.splitHorizontally(minSize + r.nextInt(q.h - minSize * 2));
+				System.out.println("Horizontal split between " + minSize + " and " + q.h);
+			}
+			else {
+				splitResult = q.splitVertically(minSize + r.nextInt(q.w - minSize * 2));
+			}
 			for (Quadrant next : splitResult) {
 				result.addAll(splitRecursively(next, minSize)); 
 			}
