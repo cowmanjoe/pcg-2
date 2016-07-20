@@ -30,4 +30,12 @@ public class FloorTile extends Tile {
 		items.add(new Item(type));
 		
 	}
+	
+	public String getType() {
+		return "floor"; 
+	}
+	
+	public List<Item> getItems() {
+		return items; 
+	}
 }

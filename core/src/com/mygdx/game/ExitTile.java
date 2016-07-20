@@ -14,5 +14,7 @@ public class ExitTile extends Tile {
 		texture = new Texture("exitTile.png");
 	}
 	
-	
+	public String getType() {
+		return "exit"; 
+	}
 }

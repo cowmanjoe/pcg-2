@@ -56,9 +56,35 @@ public class RoomGenerator {
 				}
 			}
 		}
+		System.out.println("Score: " + evaluateRoom(tiles)); 
 		
 		return tiles; 
 	}
 	
-
+	public static float evaluateRoom(Tile[][] tile) {
+		int numExits = 0; 
+		int numItems = 0; 
+		
+		float score = 0; 
+		
+		for (int i = 0; i < tile.length; i++ ) {
+			for (int j = 0; j < tile[i].length; j++) {
+				if (tile[i][j].getType() == "exit")
+					numExits++; 
+				
+				if (tile[i][j].getType() == "floor") {
+					numItems += ((FloorTile) tile[i][j]).getItems().size(); 
+				}
+			}
+		}
+		
+		System.out.println("Room has " + numExits + " exits and " + numItems + " items.");
+		
+		score = 5 * numItems * (1f / numExits); 
+		
+		if (numExits == 0) 
+			score = 0; 
+		
+		return score;
+	}
 }

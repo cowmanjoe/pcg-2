@@ -13,6 +13,8 @@ public class WallTile extends Tile {
 		texture = new Texture("wallTile.png");
 	}
 	
-	
+	public String getType() {
+		return "wall"; 
+	}
 	
 }

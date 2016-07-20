@@ -22,4 +22,6 @@ public abstract class Tile {
 	public int getHeight() {
 		return texture.getHeight(); 
 	}
+	
+	public abstract String getType(); 
 }
