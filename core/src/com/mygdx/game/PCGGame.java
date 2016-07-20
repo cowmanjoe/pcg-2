@@ -8,12 +8,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class PCGGame extends ApplicationAdapter {
 	SpriteBatch batch;
-	Texture img;
+	
+	private Room room; 
 	
 	@Override
 	public void create () {
+		super.resize(1920, 1080);
+		
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		room = RoomGenerator.newRoom(Room.DEFAULT_WIDTH, Room.DEFAULT_HEIGHT);
+		
 	}
 
 	@Override
@@ -21,13 +25,14 @@ public class PCGGame extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		batch.draw(img, 0, 0);
+		room.draw(batch);
 		batch.end();
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
 	}
+	
+	
 }

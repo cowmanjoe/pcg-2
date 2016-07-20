@@ -7,6 +7,9 @@ import com.mygdx.game.PCGGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.width = 1000; 
+		config.height = 1000; 
+		
 		new LwjglApplication(new PCGGame(), config);
 	}
 }
