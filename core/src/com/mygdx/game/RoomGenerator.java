@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import java.util.List;
 import java.util.Random;
 
 import com.mygdx.game.Item.Type;
@@ -56,7 +57,9 @@ public class RoomGenerator {
 				}
 			}
 		}
-		System.out.println("Score: " + evaluateRoom(tiles)); 
+		
+		
+		System.out.println(); 
 		
 		return tiles; 
 	}
@@ -87,4 +90,6 @@ public class RoomGenerator {
 		
 		return score;
 	}
+	
+	
 }
