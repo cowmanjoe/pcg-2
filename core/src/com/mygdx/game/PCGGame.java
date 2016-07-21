@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -45,6 +46,9 @@ public class PCGGame extends ApplicationAdapter {
 		
 		time += Gdx.graphics.getDeltaTime(); 
 		
+		
+		// For testing random map generation
+		/*
 		if (time > 2) {
 			time = 0; 
 			room = RoomGenerator.newRoom(Room.DEFAULT_WIDTH, Room.DEFAULT_HEIGHT); 
@@ -52,6 +56,11 @@ public class PCGGame extends ApplicationAdapter {
 			room.setY(Gdx.graphics.getHeight() / 2 - room.getHeight() / 2);
 		
 		}
+		*/
+		
+		
+		if (Gdx.input.isButtonPressed(Buttons.LEFT))
+			player.hit(); 
 		
 		batch.begin();
 		room.draw(batch);
