@@ -18,8 +18,6 @@ public class PCGGame extends ApplicationAdapter {
 	
 	private float time; 
 	
-	List<Quadrant> splitResults; 
-	
 	
 	@Override
 	public void create () {
@@ -35,14 +33,6 @@ public class PCGGame extends ApplicationAdapter {
 		room.setX(Gdx.graphics.getWidth() / 2 - room.getWidth() / 2);
 		room.setY(Gdx.graphics.getHeight() / 2 - room.getHeight() / 2);
 		
-		Quadrant q1 = new Quadrant(10, 10, 750, 750); 
-		splitResults = DungeonGenerator.splitRecursively(q1, 100);  
-		
-		for (Quadrant q : splitResults) {
-			System.out.println("x: " + q.x + ". y: " + q.y +
-					". w: " + q.w + ". h: " + q.h);
-			
-		}
 	}
 
 	@Override
@@ -64,14 +54,6 @@ public class PCGGame extends ApplicationAdapter {
 		room.draw(batch);
 		batch.end();
 		
-		shapeRenderer.begin(); 
-		
-		shapeRenderer.set(ShapeType.Line);
-		for (Quadrant q : splitResults) {
-			q.draw(shapeRenderer);
-			
-		}
-		shapeRenderer.end(); 
 		
 	}
 	
