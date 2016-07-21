@@ -57,9 +57,14 @@ public class PCGGame extends ApplicationAdapter {
 		
 		}
 		*/
+		InputHandler.getInstance().tick(); 
+		MouseState currentMouseState = InputHandler.getInstance().getCurrentMouseState(); 
+		MouseState previousMouseState = InputHandler.getInstance().getPreviousMouseState(); 
 		
 		
-		if (Gdx.input.isButtonPressed(Buttons.LEFT))
+		
+		if (currentMouseState.isButtonDown(Buttons.LEFT) &&
+				!previousMouseState.isButtonDown(Buttons.LEFT))
 			player.hit(); 
 		
 		
