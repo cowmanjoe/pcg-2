@@ -62,6 +62,7 @@ public class PCGGame extends ApplicationAdapter {
 		if (Gdx.input.isButtonPressed(Buttons.LEFT))
 			player.hit(); 
 		
+		
 		batch.begin();
 		room.draw(batch);
 		player.draw(batch);
