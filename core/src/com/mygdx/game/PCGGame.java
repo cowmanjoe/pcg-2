@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.mygdx.game.input.InputHandler;
+import com.mygdx.game.input.MouseState;
 
 public class PCGGame extends ApplicationAdapter {
 	private static PCGGame instance = null; 

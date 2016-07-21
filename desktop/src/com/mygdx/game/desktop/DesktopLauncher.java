@@ -4,6 +4,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.mygdx.game.PCGGame;
+import com.mygdx.game.input.InputContext;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -14,5 +15,6 @@ public class DesktopLauncher {
 		config.initialBackgroundColor = new Color(0, 0, 0, 1); 
 		
 		new LwjglApplication(PCGGame.getInstance(), config);
+		InputContext ic = new InputContext("MainContext.txt");
 	}
 }
