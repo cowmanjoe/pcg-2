@@ -18,6 +18,8 @@ public class PCGGame extends ApplicationAdapter {
 	
 	private float time; 
 	
+	Player player; 
+	
 	
 	@Override
 	public void create () {
@@ -33,11 +35,12 @@ public class PCGGame extends ApplicationAdapter {
 		room.setX(Gdx.graphics.getWidth() / 2 - room.getWidth() / 2);
 		room.setY(Gdx.graphics.getHeight() / 2 - room.getHeight() / 2);
 		
+		player = new Player(room.getX() + room.getWidth() / 2, room.getY() + room.getHeight() / 2); 
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		time += Gdx.graphics.getDeltaTime(); 
@@ -52,6 +55,7 @@ public class PCGGame extends ApplicationAdapter {
 		
 		batch.begin();
 		room.draw(batch);
+		player.draw(batch);
 		batch.end();
 		
 		
