@@ -29,17 +29,7 @@ public class RoomGenerator {
 				// If to check borders to make walls borders
 				// and 1/20 border tiles exits (except corners)
 				if (i == 0 || j == 0 || i == tiles.length - 1 || j == tiles[i].length - 1) {		
-					if (r.nextInt(20) == 0 && 
-							!(i == 0 && j == 0) && 
-							!(i == tiles.length - 1 && j == 0) &&
-							!(i == 0 && j == tiles[i].length - 1) && 
-							!(i == tiles.length - 1 && j == tiles[i].length - 1))  {
-						tiles[i][j] = new ExitTile();
-						System.out.println("Exit placed at i = " + i + " and j = " + j);
-					}
-						
-					else 
-						tiles[i][j] = new WallTile(); 
+					tiles[i][j] = new WallTile(); 
 				}
 				else {
 					FloorTile tile = new FloorTile(); 
@@ -57,6 +47,10 @@ public class RoomGenerator {
 				}
 			}
 		}
+		
+		// Generate an entrance and exit at the top and bottom
+		tiles[1 + r.nextInt(tiles.length - 2)][0] = new ExitTile(); 
+		tiles[1 + r.nextInt(tiles.length - 2)][tiles[0].length - 1] = new ExitTile(); 
 		
 		
 		System.out.println(); 
