@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +13,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class PCGGame extends ApplicationAdapter {
+	private static PCGGame instance = null; 
+	
+	
+	
 	SpriteBatch batch;
 	private ShapeRenderer shapeRenderer; 
 	
@@ -21,6 +26,15 @@ public class PCGGame extends ApplicationAdapter {
 	
 	Player player; 
 	
+	
+	private PCGGame() {}
+	
+	public static PCGGame getInstance() {
+		if (instance == null) 
+			instance = new PCGGame(); 
+		
+		return instance; 
+	}
 	
 	@Override
 	public void create () {
@@ -37,6 +51,10 @@ public class PCGGame extends ApplicationAdapter {
 		room.setY(Gdx.graphics.getHeight() / 2 - room.getHeight() / 2);
 		
 		player = new Player(room.getX() + room.getWidth() / 2, room.getY() + room.getHeight() / 2); 
+		
+		// Correct position so player is centered in tile
+		player.setX(player.getX() - player.getWidth() / 2 + room.getTileWidth() / 2);
+		player.setY(player.getY() - player.getHeight() / 2 + room.getTileHeight() / 2); 
 	}
 
 	@Override
@@ -61,12 +79,22 @@ public class PCGGame extends ApplicationAdapter {
 		MouseState currentMouseState = InputHandler.getInstance().getCurrentMouseState(); 
 		MouseState previousMouseState = InputHandler.getInstance().getPreviousMouseState(); 
 		
-		
+		if (Gdx.input.isKeyJustPressed(Keys.LEFT)) {
+			player.moveLeft();
+		} 
+		else if (Gdx.input.isKeyJustPressed(Keys.RIGHT)) {
+			player.moveRight(); 
+		}
+		else if (Gdx.input.isKeyJustPressed(Keys.DOWN)) {
+			player.moveDown(); 
+		}
+		else if (Gdx.input.isKeyJustPressed(Keys.UP)) {
+			player.moveUp(); 
+		}
 		
 		if (currentMouseState.isButtonDown(Buttons.LEFT) &&
 				!previousMouseState.isButtonDown(Buttons.LEFT))
 			player.hit(); 
-		
 		
 		batch.begin();
 		room.draw(batch);
@@ -82,4 +110,7 @@ public class PCGGame extends ApplicationAdapter {
 	}
 	
 	
+	public Room getCurrentRoom() {
+		return room; 
+	}
 }

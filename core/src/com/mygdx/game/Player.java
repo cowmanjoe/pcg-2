@@ -83,7 +83,40 @@ public class Player {
 		return y; 
 	}
 	
+	public float getWidth() {
+		if (hit) {
+			return hitAnimation.getKeyFrame(time).getRegionWidth(); 
+		}
+		
+		return idleAnimation.getKeyFrame(time).getRegionWidth(); 
+	}
+	
+	public float getHeight() {
+		if (hit) {
+			return hitAnimation.getKeyFrame(time).getRegionHeight(); 
+		}
+		
+		return idleAnimation.getKeyFrame(time).getRegionHeight(); 
+	}
+	
+	
 	public void hit() {
 		hit = true; 
+	}
+	
+	public void moveLeft() {
+		this.x -= PCGGame.getInstance().getCurrentRoom().getTileWidth(); 
+	}
+	
+	public void moveRight() {
+		this.x += PCGGame.getInstance().getCurrentRoom().getTileWidth(); 
+	}
+	
+	public void moveDown() {
+		this.y -= PCGGame.getInstance().getCurrentRoom().getTileHeight(); 
+	}
+	
+	public void moveUp() {
+		this.y += PCGGame.getInstance().getCurrentRoom().getTileHeight(); 
 	}
 }

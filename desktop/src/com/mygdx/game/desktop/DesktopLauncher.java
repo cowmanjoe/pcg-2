@@ -13,6 +13,6 @@ public class DesktopLauncher {
 		
 		config.initialBackgroundColor = new Color(0, 0, 0, 1); 
 		
-		new LwjglApplication(new PCGGame(), config);
+		new LwjglApplication(PCGGame.getInstance(), config);
 	}
 }
