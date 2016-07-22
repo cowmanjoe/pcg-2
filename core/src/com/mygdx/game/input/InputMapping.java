@@ -7,7 +7,12 @@ public class InputMapping {
 		PLAYER_MOVE_LEFT, 
 		PLAYER_MOVE_RIGHT, 
 		PLAYER_MOVE_UP, 
-		PLAYER_MOVE_DOWN
+		PLAYER_MOVE_DOWN, 
+		ACTION1, 
+		ACTION2, 
+		ACTION3, 
+		ACTION4, 
+		ACTION5
 	}
 	
 	public enum State {

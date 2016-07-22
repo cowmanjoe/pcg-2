@@ -49,7 +49,9 @@ public class InputContext {
 			rangeMap.put(axis, range); 
 			
 			System.out.println("Axis: " + axis.toString()); 
-			System.out.println("Range: " + range.toString()); 
+			System.out.println("Range: " + range.toString());
+			System.out.println(); 
+			
 			lineNum++; 
 		}
 		
@@ -65,8 +67,25 @@ public class InputContext {
 			
 			System.out.println("Button: " + button.toString());
 			System.out.println("State: " + state.toString());
+			System.out.println(); 
 			lineNum++; 
 		}
+		
+		int actionCount = Integer.parseInt(lines[lineNum]); 
+		lineNum++; 
+		for (int i = 0; i < actionCount; i++) {
+			String[] vals = lines[lineNum].split(" "); 
+			RawInputButton button = RawInputButton.values()[Integer.parseInt(vals[0])]; 
+			Action action = Action.values()[Integer.parseInt(vals[1])]; 
+			actionMap.put(button, action); 
+			
+			System.out.println("Button: " + button.toString()); 
+			System.out.println("Action: " + action.toString());
+			System.out.println(); 
+			lineNum++; 
+		}
+		
+		
 	}
 	
 	
