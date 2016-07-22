@@ -26,6 +26,10 @@ public class InputMapper {
 	
 	public InputMapper() {
 		inputContexts = new HashMap<String, InputContext>(); 
+		activeContexts = new Stack<InputContext>(); 
+		callbackTable = new HashMap<Integer, List<InputCallback>>(); 
+		
+		currentMappedInput = new MappedInput(); 
 		
 		int count; 
 		FileHandle file = Gdx.files.internal("ContextList.txt"); 

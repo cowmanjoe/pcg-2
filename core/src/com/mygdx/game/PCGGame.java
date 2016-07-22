@@ -77,7 +77,8 @@ public class PCGGame extends ApplicationAdapter {
 		
 		}
 		*/
-		InputHandler.getInstance().tick(); 
+		InputHandler.getInstance().tick();
+		/*
 		MouseState currentMouseState = InputHandler.getInstance().getCurrentMouseState(); 
 		MouseState previousMouseState = InputHandler.getInstance().getPreviousMouseState(); 
 		
@@ -97,7 +98,7 @@ public class PCGGame extends ApplicationAdapter {
 		if (currentMouseState.isButtonDown(Buttons.LEFT) &&
 				!previousMouseState.isButtonDown(Buttons.LEFT))
 			player.hit(); 
-		
+		*/
 		batch.begin();
 		room.draw(batch);
 		player.draw(batch);
@@ -114,5 +115,9 @@ public class PCGGame extends ApplicationAdapter {
 	
 	public Room getCurrentRoom() {
 		return room; 
+	}
+	
+	public Player getPlayer() {
+		return player; 
 	}
 }
