@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,21 +10,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class Player {
+public class Player extends AnimatedSprite{
 	
 	private int health; 
 	
-	private Animation idleAnimation; 
-	private Animation hitAnimation; 
-	
-	private float time; 
-	
-	private float x; 
-	private float y; 
 	
 	private boolean hit; 
 	
 	public Player(int x, int y) {
+		animations = new ArrayList<Animation>();
+		
 		TextureRegion[][] sprites = TextureRegion.split(new Texture("spriteSheet1.png"), 
 				32, 32);
 		
@@ -37,12 +34,20 @@ public class Player {
 			hitTextures[i] = sprites[5][i]; 
 		}
 		
+		Animation idleAnimation; 
+		Animation hitAnimation; 
+		
 		idleAnimation = new Animation(0.1f, idleTextures); 
 		hitAnimation = new Animation(0.15f, hitTextures); 
 		
 		
 		idleAnimation.setPlayMode(PlayMode.LOOP);
 		hitAnimation.setPlayMode(PlayMode.NORMAL); 
+		
+		animations.add(idleAnimation); 
+		animations.add(hitAnimation); 
+		
+		currentAnimation = animations.get(0); 
 		
 		time = 0; 
 		
@@ -57,50 +62,19 @@ public class Player {
 	public void draw(SpriteBatch batch) {
 		 
 		if (hit) {
-			batch.draw(hitAnimation.getKeyFrame(time), x, y);
-			if (hitAnimation.isAnimationFinished(time)) 
+			batch.draw(currentAnimation.getKeyFrame(time), x, y);
+			if (currentAnimation.isAnimationFinished(time)) {
 				hit = false; 
+				currentAnimation = animations.get(0); 
+			}
 		} else { 
-			batch.draw(idleAnimation.getKeyFrame(time), x, y); 
+			batch.draw(currentAnimation.getKeyFrame(time), x, y); 
 		}
 		time += Gdx.graphics.getDeltaTime();
 	}
 	
-	
-	public void setX(float x) {
-		this.x = x; 
-	}
-	
-	public float getX() {
-		return x; 
-	}
-	
-	public void setY(float y) {
-		this.y = y; 
-	}
-	
-	public float getY() {
-		return y; 
-	}
-	
-	public float getWidth() {
-		if (hit) {
-			return hitAnimation.getKeyFrame(time).getRegionWidth(); 
-		}
-		
-		return idleAnimation.getKeyFrame(time).getRegionWidth(); 
-	}
-	
-	public float getHeight() {
-		if (hit) {
-			return hitAnimation.getKeyFrame(time).getRegionHeight(); 
-		}
-		
-		return idleAnimation.getKeyFrame(time).getRegionHeight(); 
-	}
-	
-	
 	public void hit() {
+		currentAnimation = animations.get(1); 
 		hit = true; 
 	}
 	
