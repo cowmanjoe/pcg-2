@@ -8,7 +8,7 @@ public class InputMapping {
 		PLAYER_MOVE_RIGHT, 
 		PLAYER_MOVE_UP, 
 		PLAYER_MOVE_DOWN, 
-		ACTION1, 
+		PLAYER_HIT, 
 		ACTION2, 
 		ACTION3, 
 		ACTION4, 

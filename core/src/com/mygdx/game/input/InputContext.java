@@ -11,6 +11,20 @@ import com.mygdx.game.input.InputMapping.State;
 import com.mygdx.game.input.RawInputConstants.RawInputAxis;
 import com.mygdx.game.input.RawInputConstants.RawInputButton;
 
+/*
+ * Structure for the context file is as follows : 
+ * <number of range mappings>
+ * <RawInputAxis index> <Range index>
+ * (continue for as many range mappings as stated)
+ * <number of state mappings> 
+ * <RawInputButton index> <State index>
+ * (continue for as many state mappings as stated)
+ * <number of action mappings>
+ * <RawInputButton index> <Action index> 
+ * (continue for as many action mappings as stated)
+ */
+
+
 public class InputContext {
 	
 	private Map<RawInputButton, Action> actionMap; 
