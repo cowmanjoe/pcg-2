@@ -1,8 +1,9 @@
 package com.mygdx.game;
 
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 public abstract class Tile {
 	
 	protected Texture texture; 
@@ -22,6 +23,7 @@ public abstract class Tile {
 	public int getHeight() {
 		return texture.getHeight(); 
 	}
+	
 	
 	public abstract String getType(); 
 }

@@ -119,4 +119,6 @@ public class Player {
 	public void moveUp() {
 		this.y += PCGGame.getInstance().getCurrentRoom().getTileHeight(); 
 	}
+	
+	
 }

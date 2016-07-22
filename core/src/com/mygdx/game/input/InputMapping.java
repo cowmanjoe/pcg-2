@@ -23,7 +23,7 @@ public class InputMapping {
 	}
 	
 	public enum Range {
-		TEST_RANGE1,
-		TEST_RANGE2
+		RED_RANGE,
+		GREEN_RANGE
 	}
 }

@@ -22,6 +22,12 @@ import com.mygdx.game.input.RawInputConstants.RawInputButton;
  * <number of action mappings>
  * <RawInputButton index> <Action index> 
  * (continue for as many action mappings as stated)
+ * <number of conversions>
+ * <Range index> <minimum input> <maximum input> <minimum output> <maximum output>
+ * (continue for as many conversions as stated)
+ * <number of sensitivities>
+ * <Range index> <sensitivity> 
+ * (continue for as many sensitivities as stated) 
  */
 
 
@@ -38,6 +44,7 @@ public class InputContext {
 		actionMap = new HashMap<RawInputButton, Action>(); 
 		stateMap = new HashMap<RawInputButton, State>(); 
 		rangeMap = new HashMap<RawInputAxis, Range>(); 
+		sensitivityMap = new HashMap<Range, Double>(); 
 		
 		FileHandle file = Gdx.files.internal(fileName);
 		String contents = file.readString(); 
@@ -99,6 +106,27 @@ public class InputContext {
 			System.out.println("Action: " + action.toString());
 			System.out.println(); 
 			lineNum++; 
+		}
+		
+		int conversionCount = Integer.parseInt(lines[lineNum]);
+		lineNum++; 
+		
+		String[] conversionLines = new String[conversionCount]; 
+		for (int i = 0; i < conversionCount; i++) {
+			conversionLines[i] = lines[lineNum]; 
+			lineNum++; 
+		}
+		
+		conversions = new RangeConverter(conversionCount, conversionLines);
+		
+		int sensitivityCount = Integer.parseInt(lines[lineNum]); 
+		lineNum++; 
+		
+		for (int i = 0; i < sensitivityCount; i++) {
+			String[] vals = lines[lineNum].split(" "); 
+			Range range = Range.values()[Integer.parseInt(vals[0])];
+			double sensitivity = Double.parseDouble(vals[1]); 
+			sensitivityMap.put(range, sensitivity); 
 		}
 		
 		

@@ -120,4 +120,11 @@ public class PCGGame extends ApplicationAdapter {
 	public Player getPlayer() {
 		return player; 
 	}
+	
+	public void setRGB(float r, float g, float b) {
+		room.setRGB(r, g, b); 
+		
+		
+		
+	}
 }

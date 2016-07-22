@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 // INVARIANT: Tiles must be all the same width and height
@@ -13,18 +14,24 @@ public class Room {
 	private int x; 
 	private int y; 
 	
+	private Color tint; 
+	
 	public Room(Tile[][] tiles) {
 		this.tiles = tiles; 
+		tint = new Color(1, 1, 1, 1); 
 	}
 	
 	// Draws the room on the screen, using tiles[0][0] 
 	// as the width and height for all the tiles
 	public void draw(SpriteBatch batch) {
+		Color prevColor = batch.getColor(); 
+		batch.setColor(tint);
 		for (int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[i].length; j++) {				
 				tiles[i][j].draw(batch, x + i * tiles[0][0].getWidth(), y + j * tiles[0][0].getHeight());
 			}
 		}
+		batch.setColor(prevColor);
 	}
 	
 	// Returns number of tiles in the horizontal direction
@@ -68,5 +75,9 @@ public class Room {
 	
 	public int getY() {
 		return y; 
+	}
+	
+	public void setRGB(float r, float g, float b) {
+		tint = new Color(r, g, b, 1); 
 	}
 }

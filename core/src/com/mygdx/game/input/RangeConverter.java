@@ -1,5 +1,6 @@
 package com.mygdx.game.input;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.mygdx.game.input.InputMapping.Range;
@@ -7,21 +8,13 @@ import com.mygdx.game.input.InputMapping.Range;
 public class RangeConverter {
 	private Map<Range, Converter> conversionMap; 
 	
-	public RangeConverter(String fileContents) {
-		String[] lines = fileContents.split("\n"); 
-		
-		for (int i = 0; i < lines.length; i++) {
-			lines[i] = lines[i].trim(); 
-		}
-		int lineNum = 0; 
-		int numConversions = Integer.parseInt(lines[lineNum]); 
-		lineNum++; 
-		
+	public RangeConverter(int numConversions, String[] lines) {
+		conversionMap = new HashMap<Range, Converter>(); 
 		for (int i = 0; i < numConversions; i++) {
 			Range range; 
 			Converter converter = new Converter(); 
 			
-			String[] vals = lines[lineNum].split(" "); 
+			String[] vals = lines[i].split(" "); 
 			
 			range = Range.values()[Integer.parseInt(vals[0])];
 			converter.minimumInput = Double.parseDouble(vals[1]); 
@@ -33,8 +26,6 @@ public class RangeConverter {
 				throw new RuntimeException("Invalid input ranges"); 
 			
 			conversionMap.put(range, converter); 
-			
-			lineNum++; 
 		}
 	}
 	

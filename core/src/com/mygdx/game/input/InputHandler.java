@@ -8,6 +8,8 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.mygdx.game.PCGGame;
 import com.mygdx.game.input.InputMapping.Action;
+import com.mygdx.game.input.InputMapping.Range;
+import com.mygdx.game.input.RawInputConstants.RawInputAxis;
 import com.mygdx.game.input.RawInputConstants.RawInputButton;
 
 public class InputHandler {
@@ -117,6 +119,9 @@ public class InputHandler {
 			mapper.setRawButtonState(RawInputButton.MOUSE_LEFT, true, false);
 		}
 		
+		mapper.setRawAxisValue(RawInputAxis.MOUSE_X, currentMouseState.getX());
+		mapper.setRawAxisValue(RawInputAxis.MOUSE_Y, currentMouseState.getY());
+		
 		mapper.dispatch();
 		mapper.clear(); 
 		
@@ -160,6 +165,11 @@ public class InputHandler {
 			
 			if (inputs.actions.contains(Action.PLAYER_HIT))
 				PCGGame.getInstance().getPlayer().hit(); 
+			
+			if (inputs.ranges.containsKey(Range.RED_RANGE)) 
+				PCGGame.getInstance().setRGB(1, 
+						(float)(1 - inputs.ranges.get(Range.RED_RANGE)),
+						(float)(1 - inputs.ranges.get(Range.RED_RANGE)));
 		}
 		
 	}
