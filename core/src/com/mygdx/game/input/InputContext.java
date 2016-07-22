@@ -31,6 +31,8 @@ public class InputContext {
 	private Map<RawInputButton, State> stateMap; 
 	private Map<RawInputAxis, Range> rangeMap; 
 	
+	private Map<Range, Double> sensitivityMap; 
+	private RangeConverter conversions; 
 	
 	public InputContext(String fileName) {
 		actionMap = new HashMap<RawInputButton, Action>(); 
@@ -102,6 +104,42 @@ public class InputContext {
 		
 	}
 	
+	public Action mapButtonToAction(RawInputButton button) {
+		if (actionMap.containsKey(button)) {
+			return actionMap.get(button); 
+		}
+		
+		return null; 
+		
+		
+	}
 	
+	public State mapButtonToState(RawInputButton button) {
+		if (stateMap.containsKey(button)) {
+			return stateMap.get(button); 
+		}
+		
+		return null; 
+	}
+	
+	public Range mapAxisToRange(RawInputAxis axis) {
+		if (rangeMap.containsKey(axis)) {
+			return rangeMap.get(axis); 
+		}
+		
+		return null; 
+	}
+	
+	public double getSensitivity(Range range) {
+		if (sensitivityMap.containsKey(range)) {
+			return sensitivityMap.get(range); 
+		}
+		
+		return 1.0; 
+	}
+	
+	public RangeConverter getConversions() {
+		return conversions; 
+	}
 	
 }
