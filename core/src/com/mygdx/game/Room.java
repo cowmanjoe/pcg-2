@@ -1,18 +1,18 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 // INVARIANT: Tiles must be all the same width and height
-public class Room {
+public class Room extends Actor{
 	
 	public static final int DEFAULT_WIDTH = 20; 
 	public static final int DEFAULT_HEIGHT = 20; 
 	
 	private Tile[][] tiles; 
 	
-	private int x; 
-	private int y; 
 	
 	private Color tint; 
 	
@@ -23,12 +23,14 @@ public class Room {
 	
 	// Draws the room on the screen, using tiles[0][0] 
 	// as the width and height for all the tiles
-	public void draw(SpriteBatch batch) {
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
+		super.draw(batch, parentAlpha);
 		Color prevColor = batch.getColor(); 
 		batch.setColor(tint);
 		for (int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[i].length; j++) {				
-				tiles[i][j].draw(batch, x + i * tiles[0][0].getWidth(), y + j * tiles[0][0].getHeight());
+				tiles[i][j].draw(batch, (int)(getX() + i * tiles[0][0].getWidth()), (int)(getY() + j * tiles[0][0].getHeight()));
 			}
 		}
 		batch.setColor(prevColor);
@@ -53,31 +55,23 @@ public class Room {
 		return tiles[0][0].getHeight(); 
 	}
 	
-	public int getWidth() {
+	public float getWidth() {
 		return getNumXTiles() * getTileWidth(); 
 	}
 	
-	public int getHeight() {
+	public float getHeight() {
 		return getNumYTiles() * getTileHeight(); 
-	}
-	
-	public void setX(int x) {
-		this.x = x; 
-	}
-	
-	public int getX() {
-		return x; 
-	}
-	
-	public void setY(int y) {
-		this.y = y; 
-	}
-	
-	public int getY() {
-		return y; 
 	}
 	
 	public void setRGB(float r, float g, float b) {
 		tint = new Color(r, g, b, 1); 
+	}
+	
+	public String getTileType(int x, int y) {
+		return tiles[x][y].getType(); 
+	}
+	
+	public boolean isTileSolid(int x, int y) {
+		return  tiles[x][y].solid; 
 	}
 }

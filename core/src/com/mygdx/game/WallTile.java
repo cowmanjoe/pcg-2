@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class WallTile extends Tile {
 	
 	public WallTile() {
-		solid = false; 
+		solid = true; 
 		
 		texture = new Texture("wallTile.png");
 	}

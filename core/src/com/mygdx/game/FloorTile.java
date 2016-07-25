@@ -3,6 +3,7 @@ package com.mygdx.game;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class FloorTile extends Tile {
 	}
 	
 	@Override
-	public void draw(SpriteBatch batch, int x, int y) {
+	public void draw(Batch batch, int x, int y) {
 		super.draw(batch, x, y);
 		for (Item i : items) {
 			i.setX(x + texture.getWidth() / 2 - i.getWidth() / 2);

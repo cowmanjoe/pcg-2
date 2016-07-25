@@ -6,9 +6,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.utils.Pool;
 
 public class Player extends AnimatedSprite{
 	
@@ -20,6 +25,8 @@ public class Player extends AnimatedSprite{
 	private static final float MOVE_TIME = 0.1f; 
 	
 	private boolean hit; 
+	
+	private Pool<MoveToAction> moveActions; 
 	
 	public Player(int x, int y) {
 		animations = new ArrayList<Animation>();
@@ -56,24 +63,36 @@ public class Player extends AnimatedSprite{
 		time = 0; 
 		moveCooldown = 0; 
 		
-		this.x = x; 
-		this.y = y; 
+		setX(x);
+		setY(y); 
 		
 		hit = false; 
+		
+		moveActions = new Pool<MoveToAction>() {
+
+			@Override
+			protected MoveToAction newObject() {
+				return new MoveToAction();
+			}
+			
+		};
+		
+		
+		
 	}
 	
 	
-	
-	public void draw(SpriteBatch batch) {
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
 		 
 		if (hit) {
-			batch.draw(currentAnimation.getKeyFrame(time), x, y);
+			batch.draw(currentAnimation.getKeyFrame(time), getX(), getY());
 			if (currentAnimation.isAnimationFinished(time)) {
 				hit = false; 
 				currentAnimation = animations.get(0); 
 			}
 		} else { 
-			batch.draw(currentAnimation.getKeyFrame(time), x, y); 
+			batch.draw(currentAnimation.getKeyFrame(time), getX(), getY()); 
 		}
 		time += Gdx.graphics.getDeltaTime();
 		moveCooldown -= Gdx.graphics.getDeltaTime(); 
@@ -85,32 +104,125 @@ public class Player extends AnimatedSprite{
 	}
 	
 	public void moveLeft() {
-		if (moveCooldown <= 0) {
-			this.x -= PCGGame.getInstance().getCurrentRoom().getTileWidth(); 
+		Room r = PCGGame.getInstance().getCurrentRoom(); 
+		if (moveCooldown <= 0 && 
+				canMoveTo(getXTile() - 1, getYTile())) { 
+			MoveToAction moveAction = moveActions.obtain(); 
+			moveAction.setDuration(MOVE_TIME); 
+			moveAction.setPosition(getX() - PCGGame.getInstance().getCurrentRoom().getTileWidth(), getY());
+			this.addAction(moveAction);
 			moveCooldown = MOVE_COOLDOWN; 
+		}
+		else {
+			SequenceAction sequence = new SequenceAction(); 
+			
+			MoveToAction moveThere = moveActions.obtain(); 
+			MoveToAction moveBack = moveActions.obtain();
+			moveThere.setDuration(MOVE_TIME / 2);
+			moveThere.setPosition(getX() - r.getTileWidth() / 5, getY());
+			moveBack.setDuration(MOVE_TIME / 2);
+			moveBack.setPosition(getX(), getY());
+			
+			sequence.addAction(moveThere);
+			sequence.addAction(moveBack); 
+			
+			addAction(sequence); 
 		}
 	}
 	
 	public void moveRight() {
-		if (moveCooldown <= 0){
-			this.x += PCGGame.getInstance().getCurrentRoom().getTileWidth(); 
+		Room r = PCGGame.getInstance().getCurrentRoom(); 
+		if (moveCooldown <= 0 && 
+				canMoveTo(getXTile() + 1, getYTile())){
+			MoveToAction moveAction = moveActions.obtain(); 
+			moveAction.setDuration(MOVE_TIME); 
+			moveAction.setPosition(getX() + PCGGame.getInstance().getCurrentRoom().getTileWidth(), getY());
+			this.addAction(moveAction);
 			moveCooldown = MOVE_COOLDOWN; 
+		}
+		else {
+			SequenceAction sequence = new SequenceAction(); 
+			
+			MoveToAction moveThere = moveActions.obtain(); 
+			MoveToAction moveBack = moveActions.obtain();
+			moveThere.setDuration(MOVE_TIME / 2);
+			moveThere.setPosition(getX() + r.getTileWidth() / 5, getY());
+			moveBack.setDuration(MOVE_TIME / 2);
+			moveBack.setPosition(getX(), getY());
+			
+			sequence.addAction(moveThere);
+			sequence.addAction(moveBack); 
+			
+			addAction(sequence); 
 		}
 	}
 	
 	public void moveDown() {
-		if (moveCooldown <= 0) {
-			this.y -= PCGGame.getInstance().getCurrentRoom().getTileHeight(); 
+		Room r = PCGGame.getInstance().getCurrentRoom(); 
+		if (moveCooldown <= 0 && 
+				canMoveTo(getXTile(), getYTile() - 1)) {
+			MoveToAction moveAction = moveActions.obtain(); 
+			moveAction.setDuration(MOVE_TIME); 
+			moveAction.setPosition(getX(), getY() - r.getTileHeight());
+			this.addAction(moveAction);
 			moveCooldown = MOVE_COOLDOWN; 
+		}
+		else {
+			SequenceAction sequence = new SequenceAction(); 
+			
+			MoveToAction moveThere = moveActions.obtain(); 
+			MoveToAction moveBack = moveActions.obtain();
+			moveThere.setDuration(MOVE_TIME / 2);
+			moveThere.setPosition(getX(), getY() - r.getTileHeight() / 5);
+			moveBack.setDuration(MOVE_TIME / 2);
+			moveBack.setPosition(getX(), getY());
+			
+			sequence.addAction(moveThere);
+			sequence.addAction(moveBack); 
+			
+			addAction(sequence); 
 		}
 	}
 	
 	public void moveUp() {
-		if (moveCooldown <= 0) {
-			this.y += PCGGame.getInstance().getCurrentRoom().getTileHeight(); 
+		Room r = PCGGame.getInstance().getCurrentRoom(); 
+		if (moveCooldown <= 0 && 
+				canMoveTo(getXTile(), getYTile() + 1)) {
+			MoveToAction moveAction = moveActions.obtain(); 
+			moveAction.setDuration(MOVE_TIME); 
+			moveAction.setPosition(getX(), getY() + r.getTileHeight());
+			this.addAction(moveAction);
 			moveCooldown = MOVE_COOLDOWN; 
+		}
+		else {
+			SequenceAction sequence = new SequenceAction(); 
+			
+			MoveToAction moveThere = moveActions.obtain(); 
+			MoveToAction moveBack = moveActions.obtain();
+			moveThere.setDuration(MOVE_TIME / 2);
+			moveThere.setPosition(getX(), getY() + r.getTileHeight() / 5);
+			moveBack.setDuration(MOVE_TIME / 2);
+			moveBack.setPosition(getX(), getY());
+			
+			sequence.addAction(moveThere);
+			sequence.addAction(moveBack); 
+			
+			addAction(sequence); 
 		}
 	}
 	
+	private boolean canMoveTo(int tileX, int tileY) {
+		Room r = PCGGame.getInstance().getCurrentRoom(); 
+		return !r.isTileSolid(tileX, tileY); 
+	}
 	
+	public int getXTile() {
+		Room r = PCGGame.getInstance().getCurrentRoom(); 
+		return (int)Math.floor((getX() - r.getX()) / r.getTileWidth()); 
+	}
+	
+	public int getYTile() {
+		Room r = PCGGame.getInstance().getCurrentRoom(); 
+		return (int)Math.floor((getY() - r.getY()) / r.getTileHeight()); 
+	}
 }
