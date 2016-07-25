@@ -14,6 +14,10 @@ public class Player extends AnimatedSprite{
 	
 	private int health; 
 	
+	private float moveCooldown;
+	private static final float MOVE_COOLDOWN = 1.0f; 
+	
+	private static final float MOVE_TIME = 0.1f; 
 	
 	private boolean hit; 
 	
@@ -50,6 +54,7 @@ public class Player extends AnimatedSprite{
 		currentAnimation = animations.get(0); 
 		
 		time = 0; 
+		moveCooldown = 0; 
 		
 		this.x = x; 
 		this.y = y; 
@@ -71,6 +76,7 @@ public class Player extends AnimatedSprite{
 			batch.draw(currentAnimation.getKeyFrame(time), x, y); 
 		}
 		time += Gdx.graphics.getDeltaTime();
+		moveCooldown -= Gdx.graphics.getDeltaTime(); 
 	}
 	
 	public void hit() {
@@ -79,19 +85,31 @@ public class Player extends AnimatedSprite{
 	}
 	
 	public void moveLeft() {
-		this.x -= PCGGame.getInstance().getCurrentRoom().getTileWidth(); 
+		if (moveCooldown <= 0) {
+			this.x -= PCGGame.getInstance().getCurrentRoom().getTileWidth(); 
+			moveCooldown = MOVE_COOLDOWN; 
+		}
 	}
 	
 	public void moveRight() {
-		this.x += PCGGame.getInstance().getCurrentRoom().getTileWidth(); 
+		if (moveCooldown <= 0){
+			this.x += PCGGame.getInstance().getCurrentRoom().getTileWidth(); 
+			moveCooldown = MOVE_COOLDOWN; 
+		}
 	}
 	
 	public void moveDown() {
-		this.y -= PCGGame.getInstance().getCurrentRoom().getTileHeight(); 
+		if (moveCooldown <= 0) {
+			this.y -= PCGGame.getInstance().getCurrentRoom().getTileHeight(); 
+			moveCooldown = MOVE_COOLDOWN; 
+		}
 	}
 	
 	public void moveUp() {
-		this.y += PCGGame.getInstance().getCurrentRoom().getTileHeight(); 
+		if (moveCooldown <= 0) {
+			this.y += PCGGame.getInstance().getCurrentRoom().getTileHeight(); 
+			moveCooldown = MOVE_COOLDOWN; 
+		}
 	}
 	
 	
