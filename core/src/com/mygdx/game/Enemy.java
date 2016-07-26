@@ -1,14 +1,18 @@
 package com.mygdx.game;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,8 +22,10 @@ public class Enemy extends AnimatedSprite {
 	private boolean hit; 
 	
 	private static final float MOVE_TIME = 0.1f; 
+	private static final float MOVE_DELAY = 2.0f; 
 	
 	private Pool<MoveToAction> moveActions; 
+	private Action followPlayer; 
 	
 	public Enemy(int x, int y) {
 		animations = new ArrayList<Animation>(); 
@@ -56,6 +62,33 @@ public class Enemy extends AnimatedSprite {
 		animations.add(hitAnimation); 
 		
 		currentAnimation = animations.get(0); 
+		
+		moveActions = new Pool<MoveToAction>() {
+
+			@Override
+			protected MoveToAction newObject() {
+				return new MoveToAction();
+			}
+			
+		};
+		
+		SequenceAction sequence = new SequenceAction(); 
+		RunnableAction stepToPlayer = 
+				Actions.run(new Runnable() {
+					@Override
+					public void run() {
+						moveToPlayer(); 
+					}
+				}); 
+		
+		DelayAction delay = new DelayAction(MOVE_DELAY); 
+		
+		sequence.addAction(stepToPlayer);
+		sequence.addAction(delay);
+		
+		followPlayer = Actions.forever(sequence); 
+		
+		addAction(followPlayer); 
 		
 		time = 0; 
 		
@@ -108,6 +141,54 @@ public class Enemy extends AnimatedSprite {
 
 			addAction(sequence); 
 		}
+	}
+	
+	// Move one tile in the target's direction 
+	// either vertically or horizontally.
+	// If both are possible, only one of vertical or horizontal movement
+	// is chosen randomly.
+	public void moveToTarget(int targetX, int targetY) {
+		Random r = new Random(); 
+		
+		if (getXTile() == targetX && getYTile() == targetY)
+			return; 
+		if (getXTile() != targetX && getYTile() == targetY) {
+			if (targetX < getXTile()) 
+				move(-1, 0); 
+			else 
+				move(1, 0); 
+		}
+		else if (getXTile() == targetX && getYTile() != targetY) {
+			if (targetY < getYTile())
+				move(0, -1); 
+			else 
+				move(0, 1); 
+			
+		}
+		else if (getXTile() != targetX && getYTile() != targetY) {
+			if (r.nextBoolean()) {
+				if (targetX < getXTile())
+					move(-1, 0); 
+				else 
+					move(1, 0); 
+			}
+			else  {
+				if (targetY < getYTile()) 
+					move(0, -1); 
+				else 
+					move(0, 1); 
+			}
+				
+		}
+		
+		
+	}
+	
+	public void moveToPlayer() {
+		int playerX = PCGGame.getInstance().getPlayer().getXTile(); 
+		int playerY = PCGGame.getInstance().getPlayer().getYTile(); 
+		
+		moveToTarget(playerX, playerY); 
 	}
 	
 	public int getXTile() {

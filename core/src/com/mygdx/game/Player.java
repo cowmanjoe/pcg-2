@@ -192,11 +192,13 @@ public class Player extends AnimatedSprite{
 	private void pickupItems(int tileX, int tileY) {
 		Room r = PCGGame.getInstance().getCurrentRoom();
 		List<Item> items = r.getItemsOnTile(tileX, tileY); 
-		
-		for (Item i : items) {
-			health += i.getValue(); 
+		if (items != null) {
+			for (Item i : items) {
+				health += i.getValue(); 
+			}
+			r.removeItemsOnTile(tileX, tileY); 
 		}
 		
-		r.removeItemsOnTile(tileX, tileY); 
+		
 	}
 }
