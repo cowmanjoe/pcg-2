@@ -70,18 +70,12 @@ public class PCGGame extends ApplicationAdapter {
 		player.setX(player.getX() - player.getWidth() / 2 + room.getTileWidth() / 2);
 		player.setY(player.getY() - player.getHeight() / 2 + room.getTileHeight() / 2); 
 	
-		Enemy enemy = new Enemy((int)room.getX() + 3 * room.getTileWidth(), 
-				(int)room.getY() + 3 * room.getTileHeight()); 
-		enemy.setX(enemy.getX() - enemy.getWidth() / 2 + room.getTileWidth() / 2);
-		enemy.setY(enemy.getY() - enemy.getHeight() / 2 + room.getTileHeight() / 2);
-		
-		enemies.add(enemy); 
+		enemies = RoomGenerator.randomEnemies(room, 10); 
 		
 		stage.addActor(room);
 		stage.addActor(player);
-		stage.addActor(enemy);
-		
-		
+		for (Enemy e : enemies) 
+			stage.addActor(e);
 	}
 	
 	
