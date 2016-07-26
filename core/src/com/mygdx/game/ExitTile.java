@@ -17,4 +17,8 @@ public class ExitTile extends Tile {
 	public String getType() {
 		return "exit"; 
 	}
+	
+	public List<Item> getItems() {
+		return null; 
+	}
 }

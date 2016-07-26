@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,4 +29,6 @@ public abstract class Tile {
 	
 	
 	public abstract String getType(); 
+	
+	public abstract List<Item> getItems(); 
 }

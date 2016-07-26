@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import java.util.ArrayList;
+import java.util.List; 
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,8 +12,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
 import com.badlogic.gdx.utils.Pool;
 
 public class Player extends AnimatedSprite{
@@ -27,6 +31,7 @@ public class Player extends AnimatedSprite{
 	private boolean hit; 
 	
 	private Pool<MoveToAction> moveActions; 
+	private RunnableAction pickItemsUp; 
 	
 	public Player(int x, int y) {
 		animations = new ArrayList<Animation>();
@@ -77,8 +82,12 @@ public class Player extends AnimatedSprite{
 			
 		};
 		
-		
-		
+		pickItemsUp = Actions.run(new Runnable() {
+			@Override
+			public void run() {
+				pickupItems(getXTile(), getYTile());
+			}
+		});
 	}
 	
 	
@@ -103,112 +112,58 @@ public class Player extends AnimatedSprite{
 		hit = true; 
 	}
 	
-	public void moveLeft() {
+	// dirX, dirY = -1, 0, 1
+	// only one of dirX and dirY should not be 0
+	public void move(int dirX, int dirY) {
 		Room r = PCGGame.getInstance().getCurrentRoom(); 
-		if (moveCooldown <= 0 && 
-				canMoveTo(getXTile() - 1, getYTile())) { 
+		
+		if (moveCooldown <= 0 &&
+				canMoveTo(getXTile() + dirX, getYTile() + dirY)) {
+			SequenceAction sequence = new SequenceAction(); 
+			
 			MoveToAction moveAction = moveActions.obtain(); 
 			moveAction.setDuration(MOVE_TIME); 
-			moveAction.setPosition(getX() - PCGGame.getInstance().getCurrentRoom().getTileWidth(), getY());
-			this.addAction(moveAction);
+			moveAction.setPosition(getX() + r.getTileWidth() * dirX, getY() + r.getTileHeight() * dirY);
+			sequence.addAction(moveAction);
+			sequence.addAction(pickItemsUp);
+			
+			addAction(sequence); 
+			
+			
 			moveCooldown = MOVE_COOLDOWN; 
+			 
 		}
 		else {
 			SequenceAction sequence = new SequenceAction(); 
 			
 			MoveToAction moveThere = moveActions.obtain(); 
-			MoveToAction moveBack = moveActions.obtain();
+			MoveToAction moveBack = moveActions.obtain(); 
 			moveThere.setDuration(MOVE_TIME / 2);
-			moveThere.setPosition(getX() - r.getTileWidth() / 5, getY());
+			moveThere.setPosition(getX() + r.getTileWidth() * dirX / 5, getY() + r.getTileHeight() * dirY / 5);
 			moveBack.setDuration(MOVE_TIME / 2);
-			moveBack.setPosition(getX(), getY());
+			moveBack.setPosition(getX(0), getY());
 			
 			sequence.addAction(moveThere);
-			sequence.addAction(moveBack); 
+			sequence.addAction(moveBack);
 			
 			addAction(sequence); 
 		}
+	}
+	
+	public void moveLeft() {
+		move(-1, 0); 
 	}
 	
 	public void moveRight() {
-		Room r = PCGGame.getInstance().getCurrentRoom(); 
-		if (moveCooldown <= 0 && 
-				canMoveTo(getXTile() + 1, getYTile())){
-			MoveToAction moveAction = moveActions.obtain(); 
-			moveAction.setDuration(MOVE_TIME); 
-			moveAction.setPosition(getX() + PCGGame.getInstance().getCurrentRoom().getTileWidth(), getY());
-			this.addAction(moveAction);
-			moveCooldown = MOVE_COOLDOWN; 
-		}
-		else {
-			SequenceAction sequence = new SequenceAction(); 
-			
-			MoveToAction moveThere = moveActions.obtain(); 
-			MoveToAction moveBack = moveActions.obtain();
-			moveThere.setDuration(MOVE_TIME / 2);
-			moveThere.setPosition(getX() + r.getTileWidth() / 5, getY());
-			moveBack.setDuration(MOVE_TIME / 2);
-			moveBack.setPosition(getX(), getY());
-			
-			sequence.addAction(moveThere);
-			sequence.addAction(moveBack); 
-			
-			addAction(sequence); 
-		}
+		move(1, 0); 
 	}
 	
 	public void moveDown() {
-		Room r = PCGGame.getInstance().getCurrentRoom(); 
-		if (moveCooldown <= 0 && 
-				canMoveTo(getXTile(), getYTile() - 1)) {
-			MoveToAction moveAction = moveActions.obtain(); 
-			moveAction.setDuration(MOVE_TIME); 
-			moveAction.setPosition(getX(), getY() - r.getTileHeight());
-			this.addAction(moveAction);
-			moveCooldown = MOVE_COOLDOWN; 
-		}
-		else {
-			SequenceAction sequence = new SequenceAction(); 
-			
-			MoveToAction moveThere = moveActions.obtain(); 
-			MoveToAction moveBack = moveActions.obtain();
-			moveThere.setDuration(MOVE_TIME / 2);
-			moveThere.setPosition(getX(), getY() - r.getTileHeight() / 5);
-			moveBack.setDuration(MOVE_TIME / 2);
-			moveBack.setPosition(getX(), getY());
-			
-			sequence.addAction(moveThere);
-			sequence.addAction(moveBack); 
-			
-			addAction(sequence); 
-		}
+		move(0, -1); 
 	}
 	
 	public void moveUp() {
-		Room r = PCGGame.getInstance().getCurrentRoom(); 
-		if (moveCooldown <= 0 && 
-				canMoveTo(getXTile(), getYTile() + 1)) {
-			MoveToAction moveAction = moveActions.obtain(); 
-			moveAction.setDuration(MOVE_TIME); 
-			moveAction.setPosition(getX(), getY() + r.getTileHeight());
-			this.addAction(moveAction);
-			moveCooldown = MOVE_COOLDOWN; 
-		}
-		else {
-			SequenceAction sequence = new SequenceAction(); 
-			
-			MoveToAction moveThere = moveActions.obtain(); 
-			MoveToAction moveBack = moveActions.obtain();
-			moveThere.setDuration(MOVE_TIME / 2);
-			moveThere.setPosition(getX(), getY() + r.getTileHeight() / 5);
-			moveBack.setDuration(MOVE_TIME / 2);
-			moveBack.setPosition(getX(), getY());
-			
-			sequence.addAction(moveThere);
-			sequence.addAction(moveBack); 
-			
-			addAction(sequence); 
-		}
+		move(0, 1); 
 	}
 	
 	private boolean canMoveTo(int tileX, int tileY) {
@@ -224,5 +179,16 @@ public class Player extends AnimatedSprite{
 	public int getYTile() {
 		Room r = PCGGame.getInstance().getCurrentRoom(); 
 		return (int)Math.floor((getY() - r.getY()) / r.getTileHeight()); 
+	}
+	
+	private void pickupItems(int tileX, int tileY) {
+		Room r = PCGGame.getInstance().getCurrentRoom();
+		List<Item> items = r.getItemsOnTile(tileX, tileY); 
+		
+		for (Item i : items) {
+			health += i.getValue(); 
+		}
+		
+		r.removeItemsOnTile(tileX, tileY); 
 	}
 }

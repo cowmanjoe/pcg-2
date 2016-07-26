@@ -12,10 +12,12 @@ public abstract class AnimatedSprite extends Actor{
 	protected List<Animation> animations; 
 	protected Animation currentAnimation; 
 	
+	@Override
 	public float getWidth() {
 		return currentAnimation.getKeyFrame(time).getRegionWidth(); 
 	}
 	
+	@Override
 	public float getHeight() {
 		return currentAnimation.getKeyFrame(time).getRegionHeight(); 
 	}

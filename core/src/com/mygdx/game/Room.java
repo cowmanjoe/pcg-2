@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -73,5 +75,13 @@ public class Room extends Actor{
 	
 	public boolean isTileSolid(int x, int y) {
 		return  tiles[x][y].solid; 
+	}
+	
+	public List<Item> getItemsOnTile(int x, int y) {
+		return tiles[x][y].getItems(); 
+	}
+	
+	public void removeItemsOnTile(int x, int y) {
+		tiles[x][y].getItems().clear(); 
 	}
 }

@@ -7,6 +7,10 @@ public class Item extends Sprite{
 	
 	private Type type;
 	
+	private static final int APPLE_VALUE = 20; 
+	private static final int BANANA_VALUE = 40; 
+	private static final int CHOCOLATE_VALUE = 70; 
+	
 	public Item(Type t) {
 		super(getTextureFromType(t)); 
 		type = t; 
@@ -33,5 +37,18 @@ public class Item extends Sprite{
 	
 	public enum Type {
 		APPLE, BANANA, CHOCOLATE
+	}
+	
+	public int getValue() {
+		switch(type) {
+		case APPLE:
+			return APPLE_VALUE; 
+		case BANANA:
+			return BANANA_VALUE;
+		case CHOCOLATE:
+			return CHOCOLATE_VALUE; 
+		default:
+			return 0; 
+		}
 	}
 }
