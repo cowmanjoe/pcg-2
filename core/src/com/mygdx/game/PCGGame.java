@@ -99,6 +99,9 @@ public class PCGGame extends ApplicationAdapter {
 		System.out.println("X: " + player.getXTile() + ". Y: " + player.getYTile() + ". Type: " + currentTile);
 		
 		room.act(dt);
+		for (Action a : player.getActions()) {
+			System.out.println(a.toString());
+		}
 		player.act(dt);
 		
 		stage.draw(); 

@@ -124,6 +124,14 @@ public class Player extends AnimatedSprite{
 			MoveToAction moveAction = moveActions.obtain(); 
 			moveAction.setDuration(MOVE_TIME); 
 			moveAction.setPosition(getX() + r.getTileWidth() * dirX, getY() + r.getTileHeight() * dirY);
+			
+			pickItemsUp = Actions.run(new Runnable() {
+				@Override
+				public void run() {
+					pickupItems(getXTile(), getYTile());
+				}
+			});
+			
 			sequence.addAction(moveAction);
 			sequence.addAction(pickItemsUp);
 			
