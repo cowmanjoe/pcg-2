@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
@@ -15,12 +16,14 @@ public class Room extends Actor{
 	
 	private Tile[][] tiles; 
 	
+	private List<Enemy> enemies; 
 	
 	private Color tint; 
 	
 	public Room(Tile[][] tiles) {
 		this.tiles = tiles; 
 		tint = new Color(1, 1, 1, 1); 
+		enemies = new ArrayList<Enemy>(); 
 	}
 	
 	// Draws the room on the screen, using tiles[0][0] 
@@ -35,7 +38,19 @@ public class Room extends Actor{
 				tiles[i][j].draw(batch, (int)(getX() + i * tiles[0][0].getWidth()), (int)(getY() + j * tiles[0][0].getHeight()));
 			}
 		}
+		
+		for (Enemy e : enemies) {
+			e.draw(batch, parentAlpha);
+		}
+		
 		batch.setColor(prevColor);
+	}
+	
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+		for (Enemy e : enemies) 
+			e.act(delta);
 	}
 	
 	// Returns number of tiles in the horizontal direction
@@ -83,5 +98,26 @@ public class Room extends Actor{
 	
 	public void removeItemsOnTile(int x, int y) {
 		tiles[x][y].getItems().clear(); 
+	}
+	
+	public boolean isPlayerAt(int x, int y) {
+		Player p = PCGGame.getInstance().getPlayer(); 
+		return x == p.getXTile() && y == p.getYTile(); 
+	}
+	
+	public void addEnemy(Enemy enemy) {
+		enemies.add(enemy); 
+	}
+	
+	public void removeEnemy(Enemy enemy) {
+		enemies.remove(enemy); 
+	}
+	
+	public void addEnemies(List<Enemy> enemies) {
+		this.enemies.addAll(enemies); 
+	}
+	
+	public List<Enemy> getEnemies() {
+		return enemies; 
 	}
 }

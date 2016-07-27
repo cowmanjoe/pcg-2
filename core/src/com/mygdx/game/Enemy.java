@@ -20,6 +20,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Enemy extends AnimatedSprite {
 	
 	private boolean hit; 
+	private int damage; 
+	private int health; 
 	
 	private static final float MOVE_TIME = 0.1f; 
 	private static final float MOVE_DELAY = 2.0f; 
@@ -96,6 +98,7 @@ public class Enemy extends AnimatedSprite {
 		setY(y); 
 		
 		hit = false; 
+		damage = 10; 
 	}
 	
 	@Override
@@ -115,9 +118,15 @@ public class Enemy extends AnimatedSprite {
 	
 	// dirX, dirY = -1, 0, 1
 	// only one of dirX and dirY should not be 0
+	// Attacks the player if he is in the way
 	public void move(int dirX, int dirY) {
 		Room r = PCGGame.getInstance().getCurrentRoom(); 
-
+		
+		if (r.isPlayerAt(getXTile() + dirX, getYTile() + dirY)) {
+			attackPlayer();
+			return; 
+		}
+		
 		if (canMoveTo(getXTile() + dirX, getYTile() + dirY)) {
 			MoveToAction moveAction = moveActions.obtain(); 
 			moveAction.setDuration(MOVE_TIME); 
@@ -204,5 +213,50 @@ public class Enemy extends AnimatedSprite {
 	private boolean canMoveTo(int tileX, int tileY) {
 		Room r = PCGGame.getInstance().getCurrentRoom(); 
 		return !r.isTileSolid(tileX, tileY); 
+	}
+	
+	private void attackPlayer() {
+		Room r = PCGGame.getInstance().getCurrentRoom();
+		Player p = PCGGame.getInstance().getPlayer(); 
+		
+		SequenceAction sequence = new SequenceAction(); 
+
+		MoveToAction moveThere = moveActions.obtain(); 
+		RunnableAction hit = Actions.run(new Runnable() {
+			@Override
+			public void run() {
+				hit(); 
+			}
+		});
+		
+		MoveToAction moveBack = moveActions.obtain(); 
+		moveThere.setDuration(MOVE_TIME / 2);
+		moveThere.setPosition(getX() + (p.getX() - getX()) / 5, getY() + (p.getY() - getY()) / 5);
+		
+		
+		
+		moveBack.setDuration(MOVE_TIME / 2);
+		moveBack.setPosition(getX(), getY());
+
+		sequence.addAction(moveThere);
+		sequence.addAction(hit);
+		sequence.addAction(moveBack);
+
+		addAction(sequence); 
+		
+		p.damage(damage);
+	}
+	
+	private void hit() {
+		currentAnimation = animations.get(1); 
+		hit = true; 
+	}
+	
+	public void damage(int damage) {
+		health -= damage; 
+	}
+	
+	public int getHealth() {
+		return health; 
 	}
 }

@@ -129,13 +129,7 @@ public class InputMapper {
 	}
 	
 	private Action mapButtonToAction(RawInputButton button) {
-		/*for (InputContext next : activeContexts) {
-			Action a = next.mapButtonToAction(button); 
-			if (a != null) {
-				return a; 
-			}
-		}
-		return null; */
+		
 		
 		InputContext ic = activeContexts.lastElement();
 		Action a = ic.mapButtonToAction(button); 
@@ -148,11 +142,12 @@ public class InputMapper {
 	}
 	
 	private State mapButtonToState(RawInputButton button) {
-		for (InputContext next : activeContexts) {
-			State s = next.mapButtonToState(button); 
-			if (s != null) {
-				return s;
-			}
+		
+		InputContext ic = activeContexts.lastElement();
+		State s = ic.mapButtonToState(button); 
+		
+		if (s != null) {
+			return s; 
 		}
 		return null; 
 	}

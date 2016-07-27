@@ -35,8 +35,6 @@ public class PCGGame extends ApplicationAdapter {
 	
 	Player player; 
 	
-	List<Enemy> enemies; 
-	
 	
 	private PCGGame() {}
 	
@@ -53,7 +51,7 @@ public class PCGGame extends ApplicationAdapter {
 		
 		stage = new Stage();
 		
-		enemies = new ArrayList<Enemy>(); 
+		List<Enemy> enemies = new ArrayList<Enemy>(); 
 		
 		
 		batch = new SpriteBatch();
@@ -71,11 +69,10 @@ public class PCGGame extends ApplicationAdapter {
 		player.setY(player.getY() - player.getHeight() / 2 + room.getTileHeight() / 2); 
 	
 		enemies = RoomGenerator.randomEnemies(room, 10); 
+		room.addEnemies(enemies);
 		
 		stage.addActor(room);
 		stage.addActor(player);
-		for (Enemy e : enemies) 
-			stage.addActor(e);
 	}
 	
 	
@@ -102,15 +99,13 @@ public class PCGGame extends ApplicationAdapter {
 		InputHandler.getInstance().tick();
 		
 		String currentTile = room.getTileType(player.getXTile(), player.getYTile()); 
-		System.out.println("X: " + player.getXTile() + ". Y: " + player.getYTile() + ". Type: " + currentTile);
+		//System.out.println("X: " + player.getXTile() + ". Y: " + player.getYTile() + ". Type: " + currentTile);
 		
 		room.act(dt);
 		for (Action a : player.getActions()) {
 			System.out.println(a.toString());
 		}
 		player.act(dt);
-		for (Enemy e : enemies) 
-			e.act(dt);
 		
 		stage.draw(); 
 		
