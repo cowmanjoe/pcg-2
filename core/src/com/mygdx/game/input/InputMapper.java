@@ -50,6 +50,7 @@ public class InputMapper {
 			String name = vals[0]; 
 			String filePath = vals[1]; 
 			inputContexts.put(name, new InputContext(filePath)); 
+			lineNum++; 
 		}
 	}
 	
@@ -101,7 +102,7 @@ public class InputMapper {
 	public void addCallback(InputCallback callback, int priority) {
 		if (callbackTable.containsKey(priority)) {
 			List<InputCallback> currentCallbacks = callbackTable.get(priority); 
-			currentCallbacks.add(callback); 
+			currentCallbacks.add(callback);  
 		} else {
 			List<InputCallback> newCallback = new ArrayList<InputCallback>(); 
 			newCallback.add(callback); 
@@ -128,13 +129,22 @@ public class InputMapper {
 	}
 	
 	private Action mapButtonToAction(RawInputButton button) {
-		for (InputContext next : activeContexts) {
+		/*for (InputContext next : activeContexts) {
 			Action a = next.mapButtonToAction(button); 
 			if (a != null) {
 				return a; 
 			}
 		}
+		return null; */
+		
+		InputContext ic = activeContexts.lastElement();
+		Action a = ic.mapButtonToAction(button); 
+		
+		if (a!= null) {
+			return a; 
+		}
 		return null; 
+		
 	}
 	
 	private State mapButtonToState(RawInputButton button) {

@@ -47,12 +47,6 @@ public class InputHandler {
 		
 		mapper.pushContext("maincontext"); 
 		mapper.addCallback(defaultCallback, 0);
-		
-		mapper.setRawButtonState(convertKeyToRawButton(Keys.LEFT), true, false);
-		mapper.setRawButtonState(convertKeyToRawButton(Keys.RIGHT), true, false); 
-		mapper.setRawButtonState(convertKeyToRawButton(Keys.UP), true, false);
-		mapper.setRawButtonState(convertKeyToRawButton(Keys.DOWN), true, false);
-		
 	}
 	
 	public static InputHandler getInstance() {
@@ -118,6 +112,8 @@ public class InputHandler {
 				!previousMouseState.isButtonDown(Buttons.LEFT)) {
 			mapper.setRawButtonState(RawInputButton.MOUSE_LEFT, true, false);
 		}
+		
+		
 		
 		mapper.setRawAxisValue(RawInputAxis.MOUSE_X, currentMouseState.getX());
 		mapper.setRawAxisValue(RawInputAxis.MOUSE_Y, currentMouseState.getY());
