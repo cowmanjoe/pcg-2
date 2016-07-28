@@ -23,6 +23,7 @@ public class Player extends AnimatedSprite {
 
 	private int health;
 	private int maxHealth; 
+	private int damage; 
 
 	private float moveCooldown;
 	private static final float MOVE_COOLDOWN = 0.15f;
@@ -31,14 +32,20 @@ public class Player extends AnimatedSprite {
 	
 	private static final int INIT_HEALTH = 100; 
 	private static final int DEFAULT_MAX_HEALTH = 100; 
+	
+	private static final int DEFAULT_DAMAGE = 40; 
 
 	private boolean hit;
+	
+	private Room room;
 
 	private Pool<MoveToAction> moveActions;
 	private RunnableAction pickItemsUp;
 
-	public Player(int x, int y) {
+	public Player(int x, int y, Room room) {
 		animations = new ArrayList<Animation>();
+		
+		this.room = room; 
 
 		TextureRegion[][] sprites = TextureRegion.split(new Texture("spriteSheet1.png"), 32, 32);
 
@@ -71,7 +78,9 @@ public class Player extends AnimatedSprite {
 		moveCooldown = 0;
 		health = INIT_HEALTH; 
 		maxHealth = DEFAULT_MAX_HEALTH; 
-
+		damage = DEFAULT_DAMAGE; 
+		
+		
 		setX(x);
 		setY(y);
 
@@ -121,9 +130,12 @@ public class Player extends AnimatedSprite {
 	// dirX, dirY = -1, 0, 1
 	// only one of dirX and dirY should not be 0
 	public void move(int dirX, int dirY) {
-		Room r = PCGGame.getInstance().getCurrentRoom();
-
-		if (moveCooldown <= 0 && canMoveTo(getXTile() + dirX, getYTile() + dirY)) {
+		Room r = room;
+		
+		
+		
+		if (moveCooldown <= 0 && canMoveTo(getXTile() + dirX, getYTile() + dirY) &&
+				!r.isEnemyAt(getXTile() + dirX, getYTile() + dirY)) {
 			SequenceAction sequence = new SequenceAction();
 
 			MoveToAction moveAction = moveActions.obtain();
@@ -144,7 +156,13 @@ public class Player extends AnimatedSprite {
 
 			moveCooldown = MOVE_COOLDOWN;
 
-		} else if (moveCooldown <= 0) {
+		} else if (moveCooldown <= 0 && r.isEnemyAt(getXTile() + dirX, getYTile() + dirY)) {
+			for (Enemy e : r.getEnemiesAt(getXTile() + dirX, getYTile() + dirY)) {
+				damageEnemy(e); 
+			}
+		}
+			else if (moveCooldown <= 0) {
+		
 			SequenceAction sequence = new SequenceAction();
 
 			MoveToAction moveThere = moveActions.obtain();
@@ -178,7 +196,7 @@ public class Player extends AnimatedSprite {
 	}
 
 	private boolean canMoveTo(int tileX, int tileY) {
-		Room r = PCGGame.getInstance().getCurrentRoom();
+		Room r = room;
 		if (tileX < 0 || tileX >= r.getNumXTiles() ||
 				tileY < 0 || tileY >= r.getNumYTiles())
 			return false; 
@@ -187,17 +205,17 @@ public class Player extends AnimatedSprite {
 	}
 
 	public int getXTile() {
-		Room r = PCGGame.getInstance().getCurrentRoom();
+		Room r = room;
 		return (int) Math.floor((getX() - r.getX() + getWidth() / 2) / r.getTileWidth());
 	}
 
 	public int getYTile() {
-		Room r = PCGGame.getInstance().getCurrentRoom();
+		Room r = room;
 		return (int) Math.floor((getY() - r.getY() + getHeight() / 2) / r.getTileHeight());
 	}
 
 	private void pickupItems(int tileX, int tileY) {
-		Room r = PCGGame.getInstance().getCurrentRoom();
+		Room r = room;
 		List<Item> items = r.getItemsOnTile(tileX, tileY);
 		if (items != null) {
 			for (Item i : items) {
@@ -230,5 +248,34 @@ public class Player extends AnimatedSprite {
 
 	public int getHealth() {
 		return health;
+	}
+	
+	private void damageEnemy(Enemy enemy) {
+		SequenceAction sequence = new SequenceAction(); 
+
+		MoveToAction moveThere = moveActions.obtain(); 
+		RunnableAction hit = Actions.run(new Runnable() {
+			@Override
+			public void run() {
+				hit(); 
+			}
+		});
+		
+		MoveToAction moveBack = moveActions.obtain(); 
+		moveThere.setDuration(MOVE_TIME / 2);
+		moveThere.setPosition(getX() + (enemy.getX() - getX()) / 5, getY() + (enemy.getY() - getY()) / 5);
+		
+		
+		
+		moveBack.setDuration(MOVE_TIME / 2);
+		moveBack.setPosition(getX(), getY());
+
+		sequence.addAction(moveThere);
+		sequence.addAction(hit);
+		sequence.addAction(moveBack);
+
+		addAction(sequence); 
+		
+		enemy.damage(damage);
 	}
 }

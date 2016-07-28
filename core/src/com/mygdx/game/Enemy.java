@@ -28,6 +28,8 @@ public class Enemy extends AnimatedSprite {
 	private static final float MOVE_TIME = 0.1f; 
 	private static final float MOVE_DELAY = 2.0f; 
 	
+	private static final int DEFAULT_HEALTH = 60; 
+	
 	private Pool<MoveToAction> moveActions; 
 	private Action followPlayer; 
 	
@@ -99,6 +101,7 @@ public class Enemy extends AnimatedSprite {
 		setX(x); 
 		setY(y); 
 		
+		health = DEFAULT_HEALTH; 
 		hit = false; 
 		damage = 10; 
 		this.room = room; 
@@ -260,5 +263,9 @@ public class Enemy extends AnimatedSprite {
 	
 	public int getHealth() {
 		return health; 
+	}
+	
+	public boolean isDead() {
+		return health <= 0; 
 	}
 }

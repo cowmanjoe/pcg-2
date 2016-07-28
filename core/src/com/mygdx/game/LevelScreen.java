@@ -25,7 +25,7 @@ public class LevelScreen extends AbstractScreen{
 		enemies = RoomGenerator.randomEnemies(room, 10); 
 		room.addEnemies(enemies);
 		
-		Player player = new Player((int)(room.getX() + room.getWidth() / 2), (int)(room.getY() + room.getHeight() / 2)); 
+		Player player = new Player((int)(room.getX() + room.getWidth() / 2), (int)(room.getY() + room.getHeight() / 2), room); 
 		
 		// Correct position so player is centered in tile
 		player.setX(player.getX() - player.getWidth() / 2 + room.getTileWidth() / 2);

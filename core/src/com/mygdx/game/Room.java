@@ -54,8 +54,13 @@ public class Room extends Actor{
 	public void act(float delta) {
 		super.act(delta);
 		player.act(delta);
-		for (Enemy e : enemies) 
+		List<Enemy> deadEnemies = new ArrayList<Enemy>(); 
+		for (Enemy e : enemies) {
 			e.act(delta);
+			if (e.isDead()) 
+				deadEnemies.add(e); 
+		}
+		enemies.removeAll(deadEnemies); 
 	}
 	
 	// Returns number of tiles in the horizontal direction
@@ -123,6 +128,27 @@ public class Room extends Actor{
 	
 	public List<Enemy> getEnemies() {
 		return enemies; 
+	}
+	
+	public boolean isEnemyAt(int x, int y) {
+		for (Enemy e : enemies) {
+			if (x == e.getXTile() && y == e.getYTile()) {
+				return true; 
+			}
+		}
+		return false; 
+	}
+	
+	public List<Enemy> getEnemiesAt(int x, int y) {
+		List<Enemy> ans = new ArrayList<Enemy>(); 
+		
+		for (Enemy e : enemies) {
+			if (x == e.getXTile() && y == e.getYTile()) {
+				ans.add(e); 
+			}
+		}
+		
+		return ans; 
 	}
 	
 	public void setPlayer(Player player) {
