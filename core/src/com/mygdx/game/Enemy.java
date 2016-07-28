@@ -23,13 +23,15 @@ public class Enemy extends AnimatedSprite {
 	private int damage; 
 	private int health; 
 	
+	private Room room; 
+	
 	private static final float MOVE_TIME = 0.1f; 
 	private static final float MOVE_DELAY = 2.0f; 
 	
 	private Pool<MoveToAction> moveActions; 
 	private Action followPlayer; 
 	
-	public Enemy(int x, int y) {
+	public Enemy(int x, int y, Room room) {
 		animations = new ArrayList<Animation>(); 
 		
 		TextureRegion[][] sprites = TextureRegion.split(new Texture("spriteSheet1.png"), 
@@ -99,6 +101,7 @@ public class Enemy extends AnimatedSprite {
 		
 		hit = false; 
 		damage = 10; 
+		this.room = room; 
 	}
 	
 	@Override
@@ -120,7 +123,7 @@ public class Enemy extends AnimatedSprite {
 	// only one of dirX and dirY should not be 0
 	// Attacks the player if he is in the way
 	public void move(int dirX, int dirY) {
-		Room r = PCGGame.getInstance().getCurrentRoom(); 
+		Room r = room; 
 		
 		if (r.isPlayerAt(getXTile() + dirX, getYTile() + dirY)) {
 			attackPlayer();
@@ -194,30 +197,29 @@ public class Enemy extends AnimatedSprite {
 	}
 	
 	public void moveToPlayer() {
-		int playerX = PCGGame.getInstance().getPlayer().getXTile(); 
-		int playerY = PCGGame.getInstance().getPlayer().getYTile(); 
+		int playerX = room.getPlayer().getXTile(); 
+		int playerY = room.getPlayer().getYTile(); 
 		
 		moveToTarget(playerX, playerY); 
 	}
 	
 	public int getXTile() {
-		Room r = PCGGame.getInstance().getCurrentRoom(); 
+		Room r = room; 
 		return (int)Math.floor((getX() - r.getX()) / r.getTileWidth()); 
 	}
 	
 	public int getYTile() {
-		Room r = PCGGame.getInstance().getCurrentRoom(); 
+		Room r = room; 
 		return (int)Math.floor((getY() - r.getY()) / r.getTileHeight()); 
 	}
 	
 	private boolean canMoveTo(int tileX, int tileY) {
-		Room r = PCGGame.getInstance().getCurrentRoom(); 
+		Room r = room; 
 		return !r.isTileSolid(tileX, tileY); 
 	}
 	
 	private void attackPlayer() {
-		Room r = PCGGame.getInstance().getCurrentRoom();
-		Player p = PCGGame.getInstance().getPlayer(); 
+		Room r = room;
 		
 		SequenceAction sequence = new SequenceAction(); 
 
@@ -231,7 +233,7 @@ public class Enemy extends AnimatedSprite {
 		
 		MoveToAction moveBack = moveActions.obtain(); 
 		moveThere.setDuration(MOVE_TIME / 2);
-		moveThere.setPosition(getX() + (p.getX() - getX()) / 5, getY() + (p.getY() - getY()) / 5);
+		moveThere.setPosition(getX() + (r.getPlayer().getX() - getX()) / 5, getY() + (r.getPlayer().getY() - getY()) / 5);
 		
 		
 		
@@ -244,7 +246,7 @@ public class Enemy extends AnimatedSprite {
 
 		addAction(sequence); 
 		
-		p.damage(damage);
+		room.getPlayer().damage(damage);
 	}
 	
 	private void hit() {

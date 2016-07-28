@@ -106,6 +106,9 @@ public class Player extends AnimatedSprite {
 		} else {
 			batch.draw(currentAnimation.getKeyFrame(time), getX(), getY());
 		}
+		
+		if (health <= 0) PCGGame.getInstance().backToMain(); 
+		
 		time += Gdx.graphics.getDeltaTime();
 		moveCooldown -= Gdx.graphics.getDeltaTime();
 	}
@@ -198,7 +201,7 @@ public class Player extends AnimatedSprite {
 		List<Item> items = r.getItemsOnTile(tileX, tileY);
 		if (items != null) {
 			for (Item i : items) {
-				health += i.getValue();
+				heal(i.getValue());
 			}
 			r.removeItemsOnTile(tileX, tileY);
 		}

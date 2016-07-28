@@ -12,7 +12,6 @@ public class LevelScreen extends AbstractScreen{
 	
 	private float time; 
 	private Room room; 
-	private Player player; 
 	
 	public LevelScreen(Game game) {
 		super(game);
@@ -20,16 +19,19 @@ public class LevelScreen extends AbstractScreen{
 		
 		generateNewRoom(); 
 		
+		System.out.println("Room dimensions: " + room.getWidth() + " x " + room.getHeight());
+		
 		List<Enemy> enemies = new ArrayList<Enemy>(); 
 		enemies = RoomGenerator.randomEnemies(room, 10); 
 		room.addEnemies(enemies);
 		
-		player = new Player((int)(room.getX() + room.getWidth() / 2), (int)(room.getY() + room.getHeight() / 2)); 
+		Player player = new Player((int)(room.getX() + room.getWidth() / 2), (int)(room.getY() + room.getHeight() / 2)); 
 		
 		// Correct position so player is centered in tile
 		player.setX(player.getX() - player.getWidth() / 2 + room.getTileWidth() / 2);
 		player.setY(player.getY() - player.getHeight() / 2 + room.getTileHeight() / 2); 
 		
+		room.setPlayer(player);
 	}
 	
 	@Override
@@ -42,7 +44,6 @@ public class LevelScreen extends AbstractScreen{
 		super.show(); 
 		
 		stage.addActor(room);
-		stage.addActor(player);
 		
 		
 	}
@@ -52,7 +53,7 @@ public class LevelScreen extends AbstractScreen{
 		super.render(delta);
 		InputHandler.getInstance().tick();
 		time += delta;
-		if (player.getHealth() <= 0) this.dispose(); 
+		if (room.getPlayer().getHealth() <= 0) this.dispose(); 
 	}
 	
 	public Room getRoom() {

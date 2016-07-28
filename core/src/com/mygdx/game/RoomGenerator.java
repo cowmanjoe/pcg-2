@@ -108,7 +108,7 @@ public class RoomGenerator {
 				if (room.getTileType(x, y) == "floor" && 
 						!isOccupied) {
 					Enemy enemy = new Enemy((int)(room.getX() + x * room.getTileWidth()), 
-							(int)(room.getY() + y * room.getTileHeight())); 
+							(int)(room.getY() + y * room.getTileHeight()), room); 
 					enemy.setX(enemy.getX() + room.getTileWidth() / 2 - enemy.getWidth() / 2);
 					enemy.setY(enemy.getY() + room.getTileHeight() / 2 - enemy.getHeight() / 2);
 					

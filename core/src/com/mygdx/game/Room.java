@@ -18,6 +18,8 @@ public class Room extends Actor{
 	
 	private List<Enemy> enemies; 
 	
+	private Player player; 
+	
 	private Color tint; 
 	
 	public Room(Tile[][] tiles) {
@@ -39,6 +41,8 @@ public class Room extends Actor{
 			}
 		}
 		
+		player.draw(batch, parentAlpha);
+		
 		for (Enemy e : enemies) {
 			e.draw(batch, parentAlpha);
 		}
@@ -49,6 +53,7 @@ public class Room extends Actor{
 	@Override
 	public void act(float delta) {
 		super.act(delta);
+		player.act(delta);
 		for (Enemy e : enemies) 
 			e.act(delta);
 	}
@@ -100,9 +105,8 @@ public class Room extends Actor{
 		tiles[x][y].getItems().clear(); 
 	}
 	
-	public boolean isPlayerAt(int x, int y) {
-		Player p = PCGGame.getInstance().getPlayer(); 
-		return x == p.getXTile() && y == p.getYTile(); 
+	public boolean isPlayerAt(int x, int y) { 
+		return x == player.getXTile() && y == player.getYTile(); 
 	}
 	
 	public void addEnemy(Enemy enemy) {
@@ -119,5 +123,13 @@ public class Room extends Actor{
 	
 	public List<Enemy> getEnemies() {
 		return enemies; 
+	}
+	
+	public void setPlayer(Player player) {
+		this.player = player; 
+	}
+	
+	public Player getPlayer() {
+		return player; 
 	}
 }

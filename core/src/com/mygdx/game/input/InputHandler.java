@@ -148,19 +148,19 @@ public class InputHandler {
 		@Override
 		public void execute(MappedInput inputs) {
 			if (inputs.actions.contains(Action.PLAYER_MOVE_LEFT))
-				PCGGame.getInstance().getPlayer().moveLeft(); 
+				PCGGame.getInstance().getCurrentRoom().getPlayer().moveLeft(); 
 			
 			if (inputs.actions.contains(Action.PLAYER_MOVE_RIGHT))
-				PCGGame.getInstance().getPlayer().moveRight();
+				PCGGame.getInstance().getCurrentRoom().getPlayer().moveRight();
 			
 			if (inputs.actions.contains(Action.PLAYER_MOVE_UP))
-				PCGGame.getInstance().getPlayer().moveUp();
+				PCGGame.getInstance().getCurrentRoom().getPlayer().moveUp();
 			
 			if (inputs.actions.contains(Action.PLAYER_MOVE_DOWN))
-				PCGGame.getInstance().getPlayer().moveDown(); 
+				PCGGame.getInstance().getCurrentRoom().getPlayer().moveDown(); 
 			
 			if (inputs.actions.contains(Action.PLAYER_HIT))
-				PCGGame.getInstance().getPlayer().hit(); 
+				PCGGame.getInstance().getCurrentRoom().getPlayer().hit(); 
 			
 			if (inputs.ranges.containsKey(Range.RED_RANGE)) 
 				PCGGame.getInstance().setRGB(1, 

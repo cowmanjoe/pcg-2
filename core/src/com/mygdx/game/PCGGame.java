@@ -153,7 +153,9 @@ public class PCGGame extends Game {
 	
 	
 	public Room getCurrentRoom() {
-		return ((LevelScreen) getScreen()).getRoom(); 
+		if (getScreen().getClass() == LevelScreen.class)
+			return ((LevelScreen) getScreen()).getRoom(); 
+		return null; 
 	}
 	
 	public Player getPlayer() {
@@ -168,5 +170,9 @@ public class PCGGame extends Game {
 		room = RoomGenerator.newRoom(Room.DEFAULT_WIDTH, Room.DEFAULT_HEIGHT); 
 		room.setX(Gdx.graphics.getWidth() / 2 - room.getWidth() / 2);
 		room.setY(Gdx.graphics.getHeight() / 2 - room.getHeight() / 2);
+	}
+	
+	public void backToMain() {
+		setScreen(new MenuScreen(this)); 
 	}
 }
