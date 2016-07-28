@@ -25,18 +25,21 @@ public class Player extends AnimatedSprite {
 	private int maxHealth; 
 	private int damage; 
 
+	private int targetXTile; 
+	private int targetYTile;
+
 	private float moveCooldown;
 	private static final float MOVE_COOLDOWN = 0.15f;
 
 	private static final float MOVE_TIME = 0.15f;
-	
+
 	private static final int INIT_HEALTH = 100; 
 	private static final int DEFAULT_MAX_HEALTH = 100; 
-	
+
 	private static final int DEFAULT_DAMAGE = 40; 
 
 	private boolean hit;
-	
+
 	private Room room;
 
 	private Pool<MoveToAction> moveActions;
@@ -44,7 +47,7 @@ public class Player extends AnimatedSprite {
 
 	public Player(int x, int y, Room room) {
 		animations = new ArrayList<Animation>();
-		
+
 		this.room = room; 
 
 		TextureRegion[][] sprites = TextureRegion.split(new Texture("spriteSheet1.png"), 32, 32);
@@ -79,10 +82,13 @@ public class Player extends AnimatedSprite {
 		health = INIT_HEALTH; 
 		maxHealth = DEFAULT_MAX_HEALTH; 
 		damage = DEFAULT_DAMAGE; 
-		
-		
+
+
 		setX(x);
 		setY(y);
+
+		targetXTile = getXTile(); 
+		targetYTile = getYTile(); 
 
 		hit = false;
 
@@ -115,9 +121,9 @@ public class Player extends AnimatedSprite {
 		} else {
 			batch.draw(currentAnimation.getKeyFrame(time), getX(), getY());
 		}
-		
+
 		if (health <= 0) PCGGame.getInstance().backToMain(); 
-		
+
 		time += Gdx.graphics.getDeltaTime();
 		moveCooldown -= Gdx.graphics.getDeltaTime();
 	}
@@ -131,12 +137,21 @@ public class Player extends AnimatedSprite {
 	// only one of dirX and dirY should not be 0
 	public void move(int dirX, int dirY) {
 		Room r = room;
-		
-		
-		
-		if (moveCooldown <= 0 && canMoveTo(getXTile() + dirX, getYTile() + dirY) &&
-				!r.isEnemyAt(getXTile() + dirX, getYTile() + dirY)) {
+
+		boolean willHitEnemy = false; 
+
+		for (Enemy e : r.getEnemies()) {
+			if (e.getTargetXTile() == getXTile() + dirX &&
+					e.getTargetYTile() == getYTile() + dirY)
+				willHitEnemy = true; 
+		}
+
+		if (moveCooldown <= 0 && !willHitEnemy &&
+				canMoveTo(getXTile() + dirX, getYTile() + dirY)) {
 			SequenceAction sequence = new SequenceAction();
+
+			targetXTile = getXTile() + dirX; 
+			targetYTile = getYTile() + dirY; 
 
 			MoveToAction moveAction = moveActions.obtain();
 			moveAction.setDuration(MOVE_TIME);
@@ -156,13 +171,15 @@ public class Player extends AnimatedSprite {
 
 			moveCooldown = MOVE_COOLDOWN;
 
-		} else if (moveCooldown <= 0 && r.isEnemyAt(getXTile() + dirX, getYTile() + dirY)) {
-			for (Enemy e : r.getEnemiesAt(getXTile() + dirX, getYTile() + dirY)) {
-				damageEnemy(e); 
+		} 
+		else if (moveCooldown <= 0) {
+
+			for (Enemy e : r.getEnemies()) {
+				if (e.getTargetXTile() == getXTile() + dirX && 
+						e.getTargetYTile() == getYTile() + dirY)
+					e.damage(damage);
 			}
-		}
-			else if (moveCooldown <= 0) {
-		
+
 			SequenceAction sequence = new SequenceAction();
 
 			MoveToAction moveThere = moveActions.obtain();
@@ -200,7 +217,7 @@ public class Player extends AnimatedSprite {
 		if (tileX < 0 || tileX >= r.getNumXTiles() ||
 				tileY < 0 || tileY >= r.getNumYTiles())
 			return false; 
-		
+
 		return !r.isTileSolid(tileX, tileY);
 	}
 
@@ -249,7 +266,15 @@ public class Player extends AnimatedSprite {
 	public int getHealth() {
 		return health;
 	}
-	
+
+	public int getTargetXTile() {
+		return targetXTile; 
+	}
+
+	public int getTargetYTile() {
+		return targetYTile; 
+	}
+
 	private void damageEnemy(Enemy enemy) {
 		SequenceAction sequence = new SequenceAction(); 
 
@@ -260,13 +285,13 @@ public class Player extends AnimatedSprite {
 				hit(); 
 			}
 		});
-		
+
 		MoveToAction moveBack = moveActions.obtain(); 
 		moveThere.setDuration(MOVE_TIME / 2);
 		moveThere.setPosition(getX() + (enemy.getX() - getX()) / 5, getY() + (enemy.getY() - getY()) / 5);
-		
-		
-		
+
+
+
 		moveBack.setDuration(MOVE_TIME / 2);
 		moveBack.setPosition(getX(), getY());
 
@@ -275,7 +300,7 @@ public class Player extends AnimatedSprite {
 		sequence.addAction(moveBack);
 
 		addAction(sequence); 
-		
+
 		enemy.damage(damage);
 	}
 }

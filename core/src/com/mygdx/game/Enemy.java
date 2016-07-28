@@ -23,6 +23,9 @@ public class Enemy extends AnimatedSprite {
 	private int damage; 
 	private int health; 
 	
+	private int targetXTile; 
+	private int targetYTile; 
+	
 	private Room room; 
 	
 	private static final float MOVE_TIME = 0.1f; 
@@ -35,6 +38,8 @@ public class Enemy extends AnimatedSprite {
 	
 	public Enemy(int x, int y, Room room) {
 		animations = new ArrayList<Animation>(); 
+		
+		this.room = room; 
 		
 		TextureRegion[][] sprites = TextureRegion.split(new Texture("spriteSheet1.png"), 
 				32, 32);
@@ -101,10 +106,13 @@ public class Enemy extends AnimatedSprite {
 		setX(x); 
 		setY(y); 
 		
+		targetXTile = getXTile(); 
+		targetYTile = getYTile(); 
+		
 		health = DEFAULT_HEALTH; 
 		hit = false; 
 		damage = 10; 
-		this.room = room; 
+		
 	}
 	
 	@Override
@@ -128,12 +136,28 @@ public class Enemy extends AnimatedSprite {
 	public void move(int dirX, int dirY) {
 		Room r = room; 
 		
-		if (r.isPlayerAt(getXTile() + dirX, getYTile() + dirY)) {
+		boolean willHitPlayer = r.getPlayer().getTargetXTile() == getXTile() + dirX &&
+				r.getPlayer().getTargetYTile() == getYTile() + dirY;
+		
+		boolean willHitEnemy = false; 
+		
+		for (Enemy e : r.getEnemies()) {
+			if (e.getTargetXTile() == getXTile() + dirX &&
+					e.getTargetYTile() == getYTile() + dirY)
+				willHitEnemy = true; 
+		}
+		
+		
+		if (willHitPlayer) {
 			attackPlayer();
 			return; 
 		}
 		
-		if (canMoveTo(getXTile() + dirX, getYTile() + dirY)) {
+		if (canMoveTo(getXTile() + dirX, getYTile() + dirY) && !willHitEnemy) {
+			targetXTile = getXTile() + dirX; 
+			targetYTile = getYTile() + dirY; 
+			
+			
 			MoveToAction moveAction = moveActions.obtain(); 
 			moveAction.setDuration(MOVE_TIME); 
 			moveAction.setPosition(getX() + r.getTileWidth() * dirX, getY() + r.getTileHeight() * dirY);
@@ -268,4 +292,13 @@ public class Enemy extends AnimatedSprite {
 	public boolean isDead() {
 		return health <= 0; 
 	}
+	
+	public int getTargetXTile() {
+		return targetXTile; 
+	}
+	
+	public int getTargetYTile() {
+		return targetYTile; 
+	}
+	
 }
