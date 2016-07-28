@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
@@ -19,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.mygdx.game.input.InputHandler;
 import com.mygdx.game.input.MouseState;
 
-public class PCGGame extends ApplicationAdapter {
+public class PCGGame extends Game {
 	private static PCGGame instance = null; 
 	
 	
@@ -35,6 +36,14 @@ public class PCGGame extends ApplicationAdapter {
 	
 	Player player; 
 	
+	MenuScreen menu; 
+	
+	private enum State {
+		MENU, 
+		GAME
+	}
+	
+	private State state = State.MENU; 
 	
 	private PCGGame() {}
 	
@@ -45,11 +54,14 @@ public class PCGGame extends ApplicationAdapter {
 		return instance; 
 	}
 	
+	/*
 	@Override
 	public void create () {
 		time = 0f;
 		
 		stage = new Stage();
+		
+		menu = new MenuScreen(this); 
 		
 		List<Enemy> enemies = new ArrayList<Enemy>(); 
 		
@@ -74,42 +86,63 @@ public class PCGGame extends ApplicationAdapter {
 		stage.addActor(room);
 		stage.addActor(player);
 	}
+	*/
 	
+	@Override 
+	public void create() {
+		
+		
+	}
 	
-
+/*
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		float dt = Gdx.graphics.getDeltaTime(); 
-		
-		time += dt;
-		
-		 
-		
-		// For testing random map generation
-		/*
+		if (state == State.GAME) {
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+			float dt = Gdx.graphics.getDeltaTime(); 
+
+			time += dt;
+
+
+
+			// For testing random map generation
+			
 		if (time > 2) {
 			time = 0; 
 			generateNewRoom(); 
 		}
-		*/
-		
-		InputHandler.getInstance().tick();
-		
-		String currentTile = room.getTileType(player.getXTile(), player.getYTile()); 
-		//System.out.println("X: " + player.getXTile() + ". Y: " + player.getYTile() + ". Type: " + currentTile);
-		
-		room.act(dt);
-		for (Action a : player.getActions()) {
-			System.out.println(a.toString());
+			 
+
+			InputHandler.getInstance().tick();
+
+			//String currentTile = room.getTileType(player.getXTile(), player.getYTile()); 
+			//System.out.println("X: " + player.getXTile() + ". Y: " + player.getYTile() + ". Type: " + currentTile);
+
+			room.act(dt);
+			for (Action a : player.getActions()) {
+				System.out.println(a.toString());
+			}
+			player.act(dt);
+
+			stage.draw(); 
+
+			if (player.getHealth() <= 0) this.dispose(); 
 		}
-		player.act(dt);
+		else if (state == State.MENU) {
+			
+		}
+	}
+	*/
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
 		
-		stage.draw(); 
 		
-		
+		if (getScreen() == null) {
+			setScreen(new MenuScreen(this)); 
+		}
 	}
 	
 	@Override
@@ -120,7 +153,7 @@ public class PCGGame extends ApplicationAdapter {
 	
 	
 	public Room getCurrentRoom() {
-		return room; 
+		return ((LevelScreen) getScreen()).getRoom(); 
 	}
 	
 	public Player getPlayer() {

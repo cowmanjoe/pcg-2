@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Pool;
 public class Player extends AnimatedSprite {
 
 	private int health;
+	private int maxHealth; 
 
 	private float moveCooldown;
 	private static final float MOVE_COOLDOWN = 0.15f;
@@ -29,6 +30,7 @@ public class Player extends AnimatedSprite {
 	private static final float MOVE_TIME = 0.15f;
 	
 	private static final int INIT_HEALTH = 100; 
+	private static final int DEFAULT_MAX_HEALTH = 100; 
 
 	private boolean hit;
 
@@ -68,6 +70,7 @@ public class Player extends AnimatedSprite {
 		time = 0;
 		moveCooldown = 0;
 		health = INIT_HEALTH; 
+		maxHealth = DEFAULT_MAX_HEALTH; 
 
 		setX(x);
 		setY(y);
@@ -207,10 +210,18 @@ public class Player extends AnimatedSprite {
 	}
 
 	public void heal(int health) {
+		if (this.health + health > maxHealth) {
+			this.health = maxHealth; 
+			return; 
+		}
 		this.health += health;
 	}
 
 	public void setHealth(int health) {
+		if (health > maxHealth) {
+			this.health = maxHealth;
+			return; 
+		}
 		this.health = health;
 	}
 
