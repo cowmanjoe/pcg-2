@@ -17,6 +17,7 @@ public class Room extends Actor{
 	private Tile[][] tiles; 
 	
 	private List<Enemy> enemies; 
+	private EnemyDiagonal diagonalEnemy;
 	
 	private Player player; 
 	
@@ -26,7 +27,10 @@ public class Room extends Actor{
 		this.tiles = tiles; 
 		tint = new Color(1, 1, 1, 1); 
 		enemies = new ArrayList<Enemy>(); 
-	}
+		
+		diagonalEnemy = new EnemyDiagonal((int)(getX() + 5 * getTileWidth() - getTileWidth() / 2), 
+				(int)(getY() + 5 * getTileHeight() - getTileHeight() / 2), this);
+		}
 	
 	// Draws the room on the screen, using tiles[0][0] 
 	// as the width and height for all the tiles
@@ -47,6 +51,8 @@ public class Room extends Actor{
 			e.draw(batch, parentAlpha);
 		}
 		
+		diagonalEnemy.draw(batch, parentAlpha);
+		
 		batch.setColor(prevColor);
 	}
 	
@@ -60,7 +66,10 @@ public class Room extends Actor{
 			if (e.isDead()) 
 				deadEnemies.add(e); 
 		}
-		enemies.removeAll(deadEnemies); 
+		diagonalEnemy.act(delta);
+		
+		enemies.removeAll(deadEnemies);
+		
 	}
 	
 	// Returns number of tiles in the horizontal direction

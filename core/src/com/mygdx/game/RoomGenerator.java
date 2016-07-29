@@ -55,6 +55,7 @@ public class RoomGenerator {
 		tiles[1 + r.nextInt(tiles.length - 2)][tiles[0].length - 1] = new ExitTile(); 
 		
 		
+		
 		System.out.println(); 
 		
 		return tiles; 
@@ -117,6 +118,9 @@ public class RoomGenerator {
 				}
 			}
 		}
+		
+		
+		
 		
 		return enemies; 
 	}
