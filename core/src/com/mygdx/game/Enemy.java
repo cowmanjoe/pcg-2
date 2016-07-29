@@ -71,7 +71,7 @@ public abstract class Enemy extends AnimatedSprite {
 	}
 	
 	public int getYTile() {
-		return (int)Math.floor((getX() - room.getX() + getHeight() / 2) / room.getTileHeight());
+		return (int)Math.floor((getY() - room.getY() + getHeight() / 2) / room.getTileHeight());
 	}
 	
 	public abstract void draw(Batch batch, float parentAlpha);

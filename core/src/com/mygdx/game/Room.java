@@ -17,7 +17,6 @@ public class Room extends Actor{
 	private Tile[][] tiles; 
 	
 	private List<Enemy> enemies; 
-	private EnemyDiagonal diagonalEnemy;
 	
 	private Player player; 
 	
@@ -28,13 +27,7 @@ public class Room extends Actor{
 		tint = new Color(1, 1, 1, 1); 
 		enemies = new ArrayList<Enemy>(); 
 
-		// for testing diagonal enemy
-		diagonalEnemy = new EnemyDiagonal((int)(getX() + 5 * getTileWidth()), 
-				(int)(getY() + 5 * getTileHeight()), this);
-		//diagonalEnemy.setX(diagonalEnemy.getX() + getTileWidth() / 2 - diagonalEnemy.getWidth() / 2);
-		//diagonalEnemy.setY(diagonalEnemy.getY() + getTileWidth() / 2 - diagonalEnemy.getWidth() / 2); 
 		
-		enemies.add(diagonalEnemy); 
 	}
 	
 	// Draws the room on the screen, using tiles[0][0] 
@@ -52,11 +45,11 @@ public class Room extends Actor{
 		
 		player.draw(batch, parentAlpha);
 		
+		int counter = 0; 
 		for (Enemy e : enemies) {
 			e.draw(batch, parentAlpha);
+			System.out.println("Enemy #" + counter++ + " at x=" + e.getXTile() + " and y=" + e.getYTile());
 		}
-		
-		diagonalEnemy.draw(batch, parentAlpha);
 		
 		batch.setColor(prevColor);
 	}
@@ -67,7 +60,10 @@ public class Room extends Actor{
 		player.act(delta);
 		List<Enemy> deadEnemies = new ArrayList<Enemy>(); 
 		for (Enemy e : enemies) {
-			e.act(delta);
+			if (e == null)
+				System.out.println("Null enemy");
+			else
+				e.act(delta);
 			if (e.isDead()) 
 				deadEnemies.add(e); 
 		}

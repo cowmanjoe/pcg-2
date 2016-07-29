@@ -22,8 +22,40 @@ public class LevelScreen extends AbstractScreen{
 		System.out.println("Room dimensions: " + room.getWidth() + " x " + room.getHeight());
 		
 		List<Enemy> enemies = new ArrayList<Enemy>(); 
-		enemies.addAll(RoomGenerator.randomEnemies(room, 10)); 
+		//enemies.addAll(RoomGenerator.randomEnemies(room, 10)); 
+		
+		NormalEnemy enemy = new NormalEnemy((int)(room.getX() + room.getTileWidth() * 2), 
+				(int)(room.getY() + room.getTileHeight() * 2), room); 
+		enemy.setX(enemy.getX() + room.getTileWidth() / 2 - enemy.getWidth() / 2);
+		enemy.setY(enemy.getY() + room.getTileHeight() / 2 - enemy.getHeight() / 2); 
+		enemies.add(enemy); 
+		
+		EnemyDiagonal diagonalEnemy = new EnemyDiagonal((int)(room.getX() + room.getTileWidth() * 5), 
+				(int)(room.getY() + room.getTileHeight() * 5), room);
+		diagonalEnemy.setX(diagonalEnemy.getX() + room.getTileWidth() / 2 - diagonalEnemy.getWidth() / 2);
+		diagonalEnemy.setY(diagonalEnemy.getY() + room.getTileHeight() / 2 - diagonalEnemy.getHeight() / 2);
+		
+		System.out.println("diagonalEnemy x: " + diagonalEnemy.getX() + 
+				" y: " + diagonalEnemy.getY()); 
+		
+		enemies.add(diagonalEnemy); 
+		int counter = 0; 
+		for (Enemy e : enemies) {
+			if (e == null) 
+				System.out.println("Enemy #" + counter++ + " is null.");
+			else 
+				System.out.println("Enemy #" + counter++ + " is not null."); 
+		}
+		
 		room.addEnemies(enemies);
+		
+		counter = 0; 
+		for (Enemy e : room.getEnemies()) {
+			if (e == null) 
+				System.out.println("Enemy #" + counter++ + " is null.");
+			else
+				System.out.println("Enemy #" + counter++ + " is not null");
+		}
 		
 		Player player = new Player((int)(room.getX() + room.getWidth() / 2), (int)(room.getY() + room.getHeight() / 2), room); 
 		
