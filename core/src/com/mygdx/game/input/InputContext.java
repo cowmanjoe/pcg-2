@@ -48,12 +48,13 @@ public class InputContext {
 		
 		FileHandle file = Gdx.files.internal(fileName);
 		String contents = file.readString(); 
-		
+		/*
 		System.out.println(contents); 
 		System.out.println("Length: " + contents.length());
-		
+		*/
 		String[] lines = contents.split("\n");
-		System.out.println("Number of lines: " + lines.length);
+		
+		//System.out.println("Number of lines: " + lines.length);
 		
 		for (int i = 0; i < lines.length; i++) {
 			//lines[i].replaceAll("\n", ""); 
@@ -71,10 +72,11 @@ public class InputContext {
 			Range range = Range.values()[Integer.parseInt(vals[1])];
 			rangeMap.put(axis, range); 
 			
+			/*
 			System.out.println("Axis: " + axis.toString()); 
 			System.out.println("Range: " + range.toString());
 			System.out.println(); 
-			
+			*/
 			lineNum++; 
 		}
 		
@@ -87,10 +89,11 @@ public class InputContext {
 			RawInputButton button = RawInputButton.values()[Integer.parseInt(vals[0])]; 
 			State state = State.values()[Integer.parseInt(vals[1])]; 
 			stateMap.put(button, state); 
-			
+			/*
 			System.out.println("Button: " + button.toString());
 			System.out.println("State: " + state.toString());
 			System.out.println(); 
+			*/
 			lineNum++; 
 		}
 		
@@ -101,10 +104,11 @@ public class InputContext {
 			RawInputButton button = RawInputButton.values()[Integer.parseInt(vals[0])]; 
 			Action action = Action.values()[Integer.parseInt(vals[1])]; 
 			actionMap.put(button, action); 
-			
+			/*
 			System.out.println("Button: " + button.toString()); 
 			System.out.println("Action: " + action.toString());
 			System.out.println(); 
+			*/
 			lineNum++; 
 		}
 		

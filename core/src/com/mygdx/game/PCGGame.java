@@ -94,47 +94,6 @@ public class PCGGame extends Game {
 		
 	}
 	
-/*
-	@Override
-	public void render () {
-		if (state == State.GAME) {
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-			float dt = Gdx.graphics.getDeltaTime(); 
-
-			time += dt;
-
-
-
-			// For testing random map generation
-			
-		if (time > 2) {
-			time = 0; 
-			generateNewRoom(); 
-		}
-			 
-
-			InputHandler.getInstance().tick();
-
-			//String currentTile = room.getTileType(player.getXTile(), player.getYTile()); 
-			//System.out.println("X: " + player.getXTile() + ". Y: " + player.getYTile() + ". Type: " + currentTile);
-
-			room.act(dt);
-			for (Action a : player.getActions()) {
-				System.out.println(a.toString());
-			}
-			player.act(dt);
-
-			stage.draw(); 
-
-			if (player.getHealth() <= 0) this.dispose(); 
-		}
-		else if (state == State.MENU) {
-			
-		}
-	}
-	*/
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);

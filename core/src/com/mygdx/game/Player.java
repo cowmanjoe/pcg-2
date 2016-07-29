@@ -236,7 +236,8 @@ public class Player extends AnimatedSprite {
 		List<Item> items = r.getItemsOnTile(tileX, tileY);
 		if (items != null) {
 			for (Item i : items) {
-				heal(i.getValue());
+				if (i instanceof Food)
+					heal(((Food)i).getValue());
 			}
 			r.removeItemsOnTile(tileX, tileY);
 		}

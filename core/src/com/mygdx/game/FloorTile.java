@@ -27,8 +27,8 @@ public class FloorTile extends Tile {
 		}
 	}
 	
-	public void addItem(Item.Type type) {
-		items.add(new Item(type));
+	public void addItem(Item item) {
+		items.add(item);
 		
 	}
 	

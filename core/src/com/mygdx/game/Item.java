@@ -1,54 +1,36 @@
 package com.mygdx.game;
 
+import java.util.Random;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.mygdx.game.Food.FoodType;
+import com.mygdx.game.Weapon.WeaponType;
 
 public class Item extends Sprite{
 	
-	private Type type;
 	
-	private static final int APPLE_VALUE = 20; 
-	private static final int BANANA_VALUE = 40; 
-	private static final int CHOCOLATE_VALUE = 70; 
-	
-	public Item(Type t) {
-		super(getTextureFromType(t)); 
-		type = t; 
-		
+	public Item(Texture texture) {
+		super(texture); 
 	}
 	
 	
-	private static Texture getTextureFromType(Type t) {
-		switch (t) {
-		case APPLE: 
-			return new Texture("apple.png"); 
-		case BANANA:
-			return new Texture("banana.png"); 
-		case CHOCOLATE:
-			return new Texture("chocolate.png"); 
-		default: 
-			return null; 
+	public static Item randomItem() {
+		Random r = new Random(); 
+		if (r.nextBoolean()) {
+			// random weapon
+			int numVals = WeaponType.values().length; 
+			WeaponType type = WeaponType.values()[r.nextInt(numVals)];
+			Weapon weapon = new Weapon(type); 
+			return weapon; 
+		}
+		else {
+			// random food
+			int numVals = FoodType.values().length; 
+			FoodType type = FoodType.values()[r.nextInt(numVals)]; 
+			Food food = new Food(type); 
+			return food; 
 		}
 	}
 	
-	public Type getType() {
-		return type; 
-	}
-	
-	public enum Type {
-		APPLE, BANANA, CHOCOLATE
-	}
-	
-	public int getValue() {
-		switch(type) {
-		case APPLE:
-			return APPLE_VALUE; 
-		case BANANA:
-			return BANANA_VALUE;
-		case CHOCOLATE:
-			return CHOCOLATE_VALUE; 
-		default:
-			return 0; 
-		}
-	}
 }

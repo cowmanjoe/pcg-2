@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Pool;
 
-public class EnemyDiagonal extends Enemy{
+public class DiagonalEnemy extends Enemy{
 
 	
 	private boolean hit; 
@@ -27,7 +27,7 @@ public class EnemyDiagonal extends Enemy{
 	
 	private Action followPlayer; 
 	
-	public EnemyDiagonal(int x, int y, Room room) {
+	public DiagonalEnemy(int x, int y, Room room) {
 		super(x, y, room); 
 		TextureRegion[][] sprites = TextureRegion.split(new Texture("spriteSheet1.png"), 
 				32, 32);

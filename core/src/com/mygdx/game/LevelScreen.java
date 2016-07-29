@@ -25,7 +25,7 @@ public class LevelScreen extends AbstractScreen{
 		enemies.addAll(RoomGenerator.randomEnemies(room, 10)); 
 		
 		
-		EnemyDiagonal diagonalEnemy = new EnemyDiagonal((int)(room.getX() + room.getTileWidth() * 5), 
+		DiagonalEnemy diagonalEnemy = new DiagonalEnemy((int)(room.getX() + room.getTileWidth() * 5), 
 				(int)(room.getY() + room.getTileHeight() * 5), room);
 		diagonalEnemy.setX(diagonalEnemy.getX() + room.getTileWidth() / 2 - diagonalEnemy.getWidth() / 2);
 		diagonalEnemy.setY(diagonalEnemy.getY() + room.getTileHeight() / 2 - diagonalEnemy.getHeight() / 2);

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.Item.Type;
 
 public class RoomGenerator {
 	
@@ -38,8 +37,8 @@ public class RoomGenerator {
 
 					for (int k = 0; k < 3; k++) {
 						if (r.nextInt(10) == 0) {
-							Item.Type type = Type.values()[r.nextInt(Item.Type.values().length)];
-							tile.addItem(type);
+							Item item = Item.randomItem(); 
+							tile.addItem(item);
 						}
 					}
 					
