@@ -20,9 +20,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class NormalEnemy extends Enemy {
 	
 	private boolean hit; 
-	
-	private int targetXTile; 
-	private int targetYTile; 
 	private static final float MOVE_TIME = 0.1f; 
 	private static final float MOVE_DELAY = 2.0f; 
 	
@@ -67,6 +64,8 @@ public class NormalEnemy extends Enemy {
 		
 		targetXTile = getXTile(); 
 		targetYTile = getYTile(); 
+		
+		System.out.println("targetXTile=" + targetXTile + " targetYTile=" + targetYTile);
 		
 		SequenceAction sequence = new SequenceAction(); 
 		RunnableAction stepToPlayer = 
@@ -119,11 +118,18 @@ public class NormalEnemy extends Enemy {
 		boolean willHitEnemy = false; 
 		
 		for (Enemy e : r.getEnemies()) {
+			System.out.println("------ Current Enemy ------");
+			System.out.println("current x=" + getXTile() + " y=" + getYTile());
+			System.out.println("target x=" + (getXTile() + dirX) + " y=" + (getYTile() + dirY));
+			System.out.println("------ Comparator Enemy -----");
+			System.out.println("current x=" + e.getXTile() + " y=" + e.getYTile());
+			System.out.println("target x=" + e.getTargetXTile() + " y=" + e.getTargetYTile());
 			if (e.getTargetXTile() == getXTile() + dirX &&
 					e.getTargetYTile() == getYTile() + dirY)
 				willHitEnemy = true; 
 		}
-		
+		if (willHitEnemy)
+			System.out.println("Enemy Collision at x = " + getXTile() + " and y = " + getYTile()); 
 		
 		if (willHitPlayer) {
 			attackPlayer();

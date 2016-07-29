@@ -59,10 +59,16 @@ public abstract class Enemy extends AnimatedSprite {
 	}
 	
 	public int getTargetXTile() {
+		if (targetXTile == 0)
+			System.out.println("targetXTile = 0");
+		
 		return targetXTile; 
 	}
 	
 	public int getTargetYTile() {
+		if (targetYTile == 0)
+			System.out.println("targetYTile = 0");
+		
 		return targetYTile; 
 	}
 	
