@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -11,6 +12,11 @@ public abstract class AnimatedSprite extends Actor{
 	
 	protected List<Animation> animations; 
 	protected Animation currentAnimation; 
+	
+	public AnimatedSprite() {
+		time = 0; 
+		animations = new ArrayList<Animation>(); 
+	}
 	
 	@Override
 	public float getWidth() {

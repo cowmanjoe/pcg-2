@@ -275,7 +275,7 @@ public class Player extends AnimatedSprite {
 		return targetYTile; 
 	}
 
-	private void damageEnemy(Enemy enemy) {
+	private void damageEnemy(NormalEnemy enemy) {
 		SequenceAction sequence = new SequenceAction(); 
 
 		MoveToAction moveThere = moveActions.obtain(); 

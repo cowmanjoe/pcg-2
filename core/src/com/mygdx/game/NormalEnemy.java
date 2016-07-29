@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -16,19 +15,23 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class EnemyDiagonal extends Enemy{
-
+public class NormalEnemy extends Enemy {
 	
 	private boolean hit; 
 	
-	private static final int DEFAULT_HEALTH = 100; 
+	private int targetXTile; 
+	private int targetYTile; 
+	private static final float MOVE_TIME = 0.1f; 
+	private static final float MOVE_DELAY = 2.0f; 
 	
-	
+	private static final int DEFAULT_HEALTH = 60; 
 	private Action followPlayer; 
 	
-	public EnemyDiagonal(int x, int y, Room room) {
-		super(x, y, room); 
+	public NormalEnemy(int x, int y, Room room) {
+		super(x, y, room);
+		
 		TextureRegion[][] sprites = TextureRegion.split(new Texture("spriteSheet1.png"), 
 				32, 32);
 		
@@ -36,16 +39,16 @@ public class EnemyDiagonal extends Enemy{
 		TextureRegion[] hitTextures = new TextureRegion[2]; 
 		
 		for (int i = 0; i < idleTextures.length; i++) {
-			if (i < 4) {
-				idleTextures[i] = sprites[1][4 + i];
+			if (i < 2) {
+				idleTextures[i] = sprites[0][6+i];
 			}
 			else {
-				idleTextures[i] = sprites[2][i - 4];
+				idleTextures[i] = sprites[1][i - 2];
 			}
 		}
 		
 		for (int i = 0; i < hitTextures.length; i++) {
-			hitTextures[i] = sprites[5][i + 4]; 
+			hitTextures[i] = sprites[5][i + 2]; 
 		}
 		
 		Animation idleAnimation; 
@@ -83,10 +86,9 @@ public class EnemyDiagonal extends Enemy{
 		
 		addAction(followPlayer); 
 		
-		
 		health = DEFAULT_HEALTH; 
 		hit = false; 
-		damage = 20; 
+		damage = 10; 
 		
 	}
 	
@@ -157,8 +159,10 @@ public class EnemyDiagonal extends Enemy{
 		}
 	}
 	
-	// Move diagonally in the direction of the target
-	// May only move 2 spaces (so 1 diagonal space) at a time
+	// Move one tile in the target's direction 
+	// either vertically or horizontally.
+	// If both are possible, only one of vertical or horizontal movement
+	// is chosen randomly.
 	public void moveToTarget(int targetX, int targetY) {
 		Random r = new Random(); 
 		
@@ -166,32 +170,31 @@ public class EnemyDiagonal extends Enemy{
 			return; 
 		if (getXTile() != targetX && getYTile() == targetY) {
 			if (targetX < getXTile()) 
-				move(-1, r.nextInt(2) * 2 - 1); 
+				move(-1, 0); 
 			else 
-				move(1, r.nextInt(2) * 2 - 1); 
+				move(1, 0); 
 		}
 		else if (getXTile() == targetX && getYTile() != targetY) {
 			if (targetY < getYTile())
-				move(r.nextInt(2) * 2 - 1, -1); 
+				move(0, -1); 
 			else 
-				move(r.nextInt(2) * 2 - 1, 1); 
+				move(0, 1); 
 			
 		}
 		else if (getXTile() != targetX && getYTile() != targetY) {
-			int xDir; 
-			int yDir; 
-			
-			if (targetX < getXTile())
-				xDir = -1; 
-			else 
-				xDir = 1; 
-			
-			if (targetY < getYTile())
-				yDir = -1; 
-			else 
-				yDir = 1; 
-			
-			move(xDir, yDir);
+			if (r.nextBoolean()) {
+				if (targetX < getXTile())
+					move(-1, 0); 
+				else 
+					move(1, 0); 
+			}
+			else  {
+				if (targetY < getYTile()) 
+					move(0, -1); 
+				else 
+					move(0, 1); 
+			}
+				
 		}
 		
 		
@@ -202,16 +205,6 @@ public class EnemyDiagonal extends Enemy{
 		int playerY = room.getPlayer().getYTile(); 
 		
 		moveToTarget(playerX, playerY); 
-	}
-	
-	public int getXTile() {
-		Room r = room; 
-		return (int)Math.floor((getX() - r.getX()) / r.getTileWidth()); 
-	}
-	
-	public int getYTile() {
-		Room r = room; 
-		return (int)Math.floor((getY() - r.getY()) / r.getTileHeight()); 
 	}
 	
 	private boolean canMoveTo(int tileX, int tileY) {
@@ -253,26 +246,6 @@ public class EnemyDiagonal extends Enemy{
 	private void hit() {
 		currentAnimation = animations.get(1); 
 		hit = true; 
-	}
-	
-	public void damage(int damage) {
-		health -= damage; 
-	}
-	
-	public int getHealth() {
-		return health; 
-	}
-	
-	public boolean isDead() {
-		return health <= 0; 
-	}
-	
-	public int getTargetXTile() {
-		return targetXTile; 
-	}
-	
-	public int getTargetYTile() {
-		return targetYTile; 
 	}
 	
 	

@@ -27,10 +27,15 @@ public class Room extends Actor{
 		this.tiles = tiles; 
 		tint = new Color(1, 1, 1, 1); 
 		enemies = new ArrayList<Enemy>(); 
+
+		// for testing diagonal enemy
+		diagonalEnemy = new EnemyDiagonal((int)(getX() + 5 * getTileWidth()), 
+				(int)(getY() + 5 * getTileHeight()), this);
+		//diagonalEnemy.setX(diagonalEnemy.getX() + getTileWidth() / 2 - diagonalEnemy.getWidth() / 2);
+		//diagonalEnemy.setY(diagonalEnemy.getY() + getTileWidth() / 2 - diagonalEnemy.getWidth() / 2); 
 		
-		diagonalEnemy = new EnemyDiagonal((int)(getX() + 5 * getTileWidth() - getTileWidth() / 2), 
-				(int)(getY() + 5 * getTileHeight() - getTileHeight() / 2), this);
-		}
+		enemies.add(diagonalEnemy); 
+	}
 	
 	// Draws the room on the screen, using tiles[0][0] 
 	// as the width and height for all the tiles
@@ -66,7 +71,6 @@ public class Room extends Actor{
 			if (e.isDead()) 
 				deadEnemies.add(e); 
 		}
-		diagonalEnemy.act(delta);
 		
 		enemies.removeAll(deadEnemies);
 		
@@ -139,9 +143,9 @@ public class Room extends Actor{
 		return enemies; 
 	}
 	
-	public boolean isEnemyAt(int x, int y) {
+	public boolean isEnemyAt(int tileX, int tileY) {
 		for (Enemy e : enemies) {
-			if (x == e.getXTile() && y == e.getYTile()) {
+			if (tileX == e.getXTile() && tileY == e.getYTile()) {
 				return true; 
 			}
 		}

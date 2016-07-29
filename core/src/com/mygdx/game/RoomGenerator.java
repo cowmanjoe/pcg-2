@@ -88,8 +88,8 @@ public class RoomGenerator {
 		return score;
 	}
 	
-	public static List<Enemy> randomEnemies(Room room, int numEnemies) {
-		List<Enemy> enemies = new ArrayList<Enemy>(); 
+	public static List<NormalEnemy> randomEnemies(Room room, int numEnemies) {
+		List<NormalEnemy> enemies = new ArrayList<NormalEnemy>(); 
 		List<Vector2> enemyPositions = new ArrayList<Vector2>(); 
 		Random r = new Random(); 
 		
@@ -101,14 +101,14 @@ public class RoomGenerator {
 				int y = r.nextInt(room.getNumYTiles()); 
 				
 				boolean isOccupied = false; 
-				for (Enemy e : enemies) {
+				for (NormalEnemy e : enemies) {
 					if (e.getXTile() == x && e.getYTile() == y)
 						isOccupied = true; 
 				}
 				
 				if (room.getTileType(x, y) == "floor" && 
 						!isOccupied) {
-					Enemy enemy = new Enemy((int)(room.getX() + x * room.getTileWidth()), 
+					NormalEnemy enemy = new NormalEnemy((int)(room.getX() + x * room.getTileWidth()), 
 							(int)(room.getY() + y * room.getTileHeight()), room); 
 					enemy.setX(enemy.getX() + room.getTileWidth() / 2 - enemy.getWidth() / 2);
 					enemy.setY(enemy.getY() + room.getTileHeight() / 2 - enemy.getHeight() / 2);
