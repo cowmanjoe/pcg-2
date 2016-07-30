@@ -37,8 +37,9 @@ public class RoomGenerator {
 
 					for (int k = 0; k < 3; k++) {
 						if (r.nextInt(10) == 0) {
-							Item item = Item.randomItem(); 
-							tile.addItem(item);
+							Item item = Item.randomItem(0.25f, 0.05f); 
+							if (item != null)
+								tile.addItem(item);
 						}
 					}
 					

@@ -36,9 +36,11 @@ public class Player extends AnimatedSprite {
 	private static final int INIT_HEALTH = 100; 
 	private static final int DEFAULT_MAX_HEALTH = 100; 
 
-	private static final int DEFAULT_DAMAGE = 40; 
+	private static final int UNARMED_DAMAGE = 40; 
 
 	private boolean hit;
+	
+	private Weapon currentWeapon;
 
 	private Room room;
 
@@ -81,7 +83,7 @@ public class Player extends AnimatedSprite {
 		moveCooldown = 0;
 		health = INIT_HEALTH; 
 		maxHealth = DEFAULT_MAX_HEALTH; 
-		damage = DEFAULT_DAMAGE; 
+		damage = UNARMED_DAMAGE; 
 
 
 		setX(x);
@@ -107,10 +109,18 @@ public class Player extends AnimatedSprite {
 				pickupItems(getXTile(), getYTile());
 			}
 		});
+		
+		currentWeapon = null; 
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
+		if (currentWeapon == null)
+			damage = UNARMED_DAMAGE; 
+		else {
+			damage = currentWeapon.getDamage(); 
+		}
+		
 		System.out.println("Health: " + health);
 		if (hit) {
 			batch.draw(currentAnimation.getKeyFrame(time), getX(), getY());
@@ -238,6 +248,8 @@ public class Player extends AnimatedSprite {
 			for (Item i : items) {
 				if (i instanceof Food)
 					heal(((Food)i).getValue());
+				else if (i instanceof Weapon) 
+					currentWeapon = (Weapon) i; 
 			}
 			r.removeItemsOnTile(tileX, tileY);
 		}
