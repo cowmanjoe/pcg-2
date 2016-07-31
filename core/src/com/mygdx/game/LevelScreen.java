@@ -12,6 +12,7 @@ public class LevelScreen extends AbstractScreen{
 	
 	private float time; 
 	private Room room; 
+	private HealthBar healthBar; 
 	
 	public LevelScreen(Game game) {
 		super(game);
@@ -58,6 +59,8 @@ public class LevelScreen extends AbstractScreen{
 		player.setX(player.getX() - player.getWidth() / 2 + room.getTileWidth() / 2);
 		player.setY(player.getY() - player.getHeight() / 2 + room.getTileHeight() / 2); 
 		
+		healthBar = new HealthBar(Gdx.graphics.getWidth() / 2 - HealthBar.WIDTH / 2, (int)room.getY() - 50, player.getHealth()); 
+		
 		room.setPlayer(player);
 	}
 	
@@ -78,6 +81,8 @@ public class LevelScreen extends AbstractScreen{
 	@Override 
 	public void render(float delta) {
 		super.render(delta);
+		healthBar.setHealth(room.getPlayer().getHealth());
+		healthBar.draw();
 		InputHandler.getInstance().tick();
 		time += delta;
 		if (room.getPlayer().getHealth() <= 0) this.dispose(); 

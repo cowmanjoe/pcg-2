@@ -34,7 +34,8 @@ public class PCGGame extends Game {
 	
 	private float time; 
 	
-	Player player; 
+	private Player player; 
+	
 	
 	MenuScreen menu; 
 	
